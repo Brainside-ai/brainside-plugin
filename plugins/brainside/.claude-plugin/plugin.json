@@ -1,8 +1,8 @@
 {
   "name": "brainside",
   "displayName": "Brainside",
-  "version": "0.1.1",
-  "description": "Your Brainside memory inside your AI. Adds the Brainside skill (when to search, when to ask before saving, what never to do) and the Brainside MCP connector (https://api.brainside.ai/mcp, OAuth login on brainside.ai).",
+  "version": "0.2.0",
+  "description": "Your Brainside memory inside your AI. Adds the Brainside skill (when to search, what to save on its own, when to ask first, what never to do) and the Brainside MCP connector (https://api.brainside.ai/mcp, OAuth login on brainside.ai).",
   "author": {
     "name": "Brainside",
     "email": "suporte@brainside.ai",

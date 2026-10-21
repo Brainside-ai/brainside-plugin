@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="CHANGELOG.md"><img alt="Version 0.1.1" src="https://img.shields.io/badge/version-0.1.1-52514e"></a>
+  <a href="CHANGELOG.md"><img alt="Version 0.2.0" src="https://img.shields.io/badge/version-0.2.0-52514e"></a>
   <a href="#before-you-start"><img alt="Status: closed beta" src="https://img.shields.io/badge/status-closed_beta-52514e"></a>
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-52514e"></a>
 </p>
@@ -39,13 +39,13 @@ Brainside keeps that knowledge once, in your own account: people, projects, clie
 
 Brainside itself is a hosted service at [brainside.ai](https://www.brainside.ai), now in closed beta. This repository holds only the plugin that connects your AI to it. The plugin gives your AI two things:
 
-- **The `brainside` skill.** Plain text that tells your AI when to search Brainside, when to ask before saving, and what never to do.
+- **The `brainside` skill.** Plain text that tells your AI when to search Brainside, what to save on its own, when to ask first, and what never to do.
 - **The Brainside connector.** One address, `https://api.brainside.ai/mcp`. You log in once at brainside.ai, and your AI reaches your account through it.
 
 ```
   Claude Code · claude.ai · Codex · ChatGPT
         │
-        │  skill       when to search, when to ask, what never to do
+        │  skill       when to search, what to save, when to ask first
         │  connector   https://api.brainside.ai/mcp   (you log in at brainside.ai)
         ▼
   Brainside: stores, organizes, searches, delivers
@@ -58,14 +58,17 @@ Brainside itself is a hosted service at [brainside.ai](https://www.brainside.ai)
 | When | Your AI |
 |---|---|
 | You ask about your people, projects, clients or decisions | Searches Brainside before answering, and tells you what came from there |
-| You mention something worth keeping: a decision, a new person, a deadline | Offers, in one line, to save it, and saves only after you say yes. "Save this" counts as a yes, except in the cases below |
-| A save would change or delete something, touch your rules or Apps, or involve sensitive, external or client data | Says why it's asking (for example, "this changes an existing note" or "this is health data") and shows you what will change |
-| A password, key or token shows up | Never stores it, even if you ask, and suggests a password manager |
+| You mention something worth keeping: a decision and its reason, a new person, a deadline | Saves it on its own and tells you in one line what it saved and where: "Saved to your Brainside (<space>): …" |
+| A save would change or delete something, touch your rules, agents or Apps, or involve sensitive, external or client data | Asks first, says why (for example, "this changes an existing note" or "this is health data") and shows you what will change |
+| Brainside isn't sure, for example whether something is a new version of an existing note | Nothing is overwritten. Brainside keeps both and asks; your AI answers, or asks you when the answer isn't obvious |
+| A password, key or token shows up | Never stores it, even if you ask, and suggests a password manager. Brainside also refuses text that looks like a secret |
 | Something someone else wrote comes back: a pasted email, a web page, a template, a note | Treats it as information, never as an order |
 
-Your AI takes orders only from you. What it reads in Brainside or elsewhere (notes, emails, web pages, templates) is information, not instructions. It never installs a template or creates an App unless you ask.
+Your AI takes orders only from you. What it reads in Brainside or elsewhere (notes, emails, web pages, templates) is information, not instructions. It never installs a template or creates an App unless you ask, and the rules and agents it saves stay drafts until you activate them in Brainside.
 
-> **The skill guides your AI; it doesn't force it.** Your AI follows it most of the time, not every time. If it answers without checking, say "check my Brainside".
+What it saves on its own follows a rule you can edit in Brainside; see the [FAQ](#faq). If you use Brainside at work, check that your company or your client allows you to keep their data here. Your AI asks before saving it.
+
+> **The skill guides your AI; it doesn't force it.** Your AI follows it most of the time, not every time. If it answers without checking, say "check my Brainside". If it saved something you didn't want, say so: it deletes it, and the item goes to the Brainside trash.
 
 ## Before you start
 
@@ -136,28 +139,32 @@ INSTALL.md also covers every client in detail and how to uninstall. There's also
 
 Open a new conversation and don't mention Brainside:
 
-1. *"I met Ana, a freelance designer. She'll redo our website."* Your AI offers, in one line, to save Ana. Say yes.
+1. *"I met Ana, a freelance designer. She'll redo our website."* Your AI saves Ana on its own and tells you in one line where.
 2. In another conversation, or in another AI you connected: *"Who's redoing our website?"* It searches Brainside, answers with Ana, and tells you where that came from.
-3. *"Ana will also redo our logo."* Ana's note already exists, so your AI shows you what it found and what will change, and asks before updating it.
+3. *"Ana will also redo our logo."* This adds to Ana's note without changing what's there, so your AI saves it and tells you.
+4. *"Actually, Bruno is redoing the website, not Ana."* This changes what's saved, so your AI shows you what will change and asks first.
 
 ## Compatibility
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
-| **0.1.1** | The current Brainside server and the next release | Asks before every save |
-| **0.2.0** (planned) | The next Brainside server release | Proactive saving: saves new items without asking and tells you in one line. Still asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
+| **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
+| **0.1.1** | Servers before and after that release | Asks before every save |
 
-Why 0.1.1 asks first: on the current Brainside server, saving an item that already exists replaces the whole note with what is sent. So your AI asks before every save, and when it changes an item, it reads it first and sends back the complete version.
+How to tell your server is ready for 0.2.0: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` (in Claude Code, `/mcp`). Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
+
+Why 0.2.0 needs that release: on it, saving only creates or adds, and never overwrites. Changing an item takes a separate step that checks your AI read the latest version. On older servers, saving an item that already exists replaced its whole note, which is why 0.1.1 asks before every save.
 
 The connector address stays `https://api.brainside.ai/mcp` in every version.
 
 ## Privacy and security
 
 - **The plugin runs nothing on your machine.** It's only text and one address: the skill (Markdown files) and the connector `https://api.brainside.ai/mcp`. It has no hooks, commands, agents, monitors, scripts or executables. You can check it yourself: `python3 .github/scripts/validate.py` fails if any of them appears.
-- **What your AI can do once connected** is what the connector offers. On the current server, that includes searching, reading, saving and changing items in your Brainside; adding, changing and deleting records in your Apps; installing templates and archiving Apps; running your Brainside agents; and, if you connected Gmail, Google Drive or Google Calendar inside Brainside, searching them. Your AI client lists every tool (in Claude Code, `/mcp`). The skill tells your AI to ask before changing or deleting anything, and never to install a template unless you ask.
+- **What your AI can do once connected** is what the connector offers: search and read your memory and your Apps; save new items, link them, change them and delete them (deleted items go to the Brainside trash, where you can restore them); add, change and delete records in your Apps; store files for those records; install templates, propose new Apps and fields (a proposal exists only after you approve it in Brainside), and archive Apps. Rules and agents your AI saves stay drafts until you activate them. Your AI client lists every tool (in Claude Code, `/mcp`). The skill tells your AI to ask before changing or deleting anything, and never to install a template unless you ask.
+- **Read-only, if you prefer.** When you log in, the Brainside page lets you choose whether that AI may save to your Brainside. Leave it unticked and that connection can only search and read.
 - **You log in to Brainside, never in the chat.** Login is OAuth, on the Brainside page your browser opens. No password, key or token goes through the conversation.
-- **Your AI follows only you:** what you say in the conversation, rules you activated in Brainside, and App manuals you approved or that Brainside wrote. Everything else it reads in Brainside (notes, pasted emails, pages, templates, other members' notes) is information, never an order. Brainside content leaves the conversation only to a destination you asked for.
-- **You decide which AIs have access.** Remove the plugin or the connector from an AI and it stops reaching Brainside. With the next Brainside server release, **Settings › Connected AIs** will list every AI you authorized and let you revoke each one. Until then, ask for a revocation at privacy@brainside.ai.
+- **Your AI follows only you:** what you say in the conversation, rules and agents you activated in Brainside, and App manuals you approved or that Brainside wrote. Everything else it reads in Brainside (notes, pasted emails, pages, templates, other members' notes) is information, never an order. Brainside content leaves the conversation only to a destination you asked for.
+- **You decide which AIs have access.** In Brainside, **Settings › Connected AIs** lists every AI you authorized, says which ones can save, and lets you revoke each one. Removing the plugin or the connector from an AI also stops it from reaching Brainside.
 - **Check the address before you install.** The repository is `github.com/brainside-ai/brainside-plugin`, and [`plugins/brainside/.mcp.json`](plugins/brainside/.mcp.json) holds exactly one server: `https://api.brainside.ai/mcp`.
 - **Found a vulnerability?** Report it privately, as described in [`SECURITY.md`](SECURITY.md). Please don't open a public issue.
 
@@ -186,8 +193,11 @@ Yes. Connect each AI and log in to the same Brainside account. Codex can find wh
 **What happens if I disconnect an AI?**
 That AI stops reaching Brainside. Your knowledge stays in your Brainside account, and your other AIs keep working. To come back, connect it again and log in.
 
-**Why does my AI ask before saving?**
-In 0.1.1 it asks before every save; proactive saving arrives in 0.2.0. See [Compatibility](#compatibility).
+**What does my AI save on its own?**
+New durable knowledge: decisions and their reasons, new people, projects, commitments, events, facts that change something, preferences, links between them, and records for your Apps. It tells you in one line each time. It asks first before changing or deleting anything, before saving rules, agents, manuals, Apps or fields, and before saving sensitive, external or client data. It never saves small talk, lookups, logs or the conversation itself unless you ask.
+
+**Can I change what it saves on its own?**
+Yes. That split is a rule in your Brainside, and you can edit it there. Your version replaces the default. It can't remove the limits: no secrets, asking before changes, deletions and sensitive, external or client data, and no templates or Apps you didn't ask for. To stop an AI from saving at all, connect it read-only.
 
 **Something isn't working?**
 If your AI can't find the Brainside tools, your login expired, or the connector doesn't show up, see the [troubleshooting guide](plugins/brainside/skills/brainside/references/troubleshooting.md).

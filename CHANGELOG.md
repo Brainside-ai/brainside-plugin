@@ -6,10 +6,41 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
-| **0.1.1** | The current Brainside server and the next release | Asks before every save |
-| **0.2.0** (planned) | The next Brainside server release | Proactive saving: saves new items without asking and tells you in one line. Still asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
+| **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
+| **0.1.1** | Servers before and after that release | Asks before every save |
 
-The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.2.0 — 2026-10-21
+
+Proactive saving, for the Brainside server released on 2026-10-21 (the second release that day) or later. Update the plugin after that release is live.
+
+### What changes for you
+
+- **Proactive saving.** Your AI saves new durable knowledge on its own and tells you in one line what it saved and where: "Saved to your Brainside (<space>): …". That covers decisions and their reasons, new people, projects, commitments, events, facts that change something, preferences, links between items, additions that keep what an item already says, and records for your Apps. Small talk, lookups, logs and the conversation itself are saved only when you ask.
+- **Still asks first** before changing or deleting anything; before setup (rules, agents, App manuals, new Apps or fields); and before saving sensitive data about you or anyone else, external content, or client and employer data. For client data it offers, in this order, the organization's space, your takeaway without names, e-mails or other identifiers, or not saving. It saves only the minimum and never bulk copies from their systems.
+- **Nothing is overwritten by a save.** Saving only creates or adds. Changing an item takes a separate step that checks your AI read the latest version; if the item changed in between, nothing is saved and your AI reads it again.
+- **Brainside asks when it isn't sure,** for example whether something is a new version of an existing note. What is certain is saved; your AI answers the question, asks you when the answer isn't obvious, and needs your yes before treating something as a new version. "Don't know" leaves the question waiting for you on the Brainside screen.
+- **Deleting** sends the item to the Brainside trash, where you can restore it. Rules and agents are never deleted by your AI: the request waits for your approval in Brainside.
+- **Your rules and agents.** Your AI reads your general rules once per conversation and follows the rules that apply to what it found. Rules and agents it saves are drafts until you activate them, and changes to active ones are proposals.
+- **Your saving policy is editable.** The split above is a rule in your Brainside. Your version replaces the default; it can't remove the limits.
+- **Apps** are found through search and opened like any other item, with their fields and manual. A new App or field is a proposal until you approve it on the Brainside screen.
+- **Read-only connections.** If you chose read-only when you logged in, your AI only searches and reads.
+- **Secrets:** still never stored. Brainside's server also refuses text that looks like a secret.
+- If your AI's connector lists tools to save but not `answer_node_questions` yet, the skill falls back to asking before every save.
+
+### What the skill expects from the server
+
+- One way in for reading the memory (search, then open the item) and one for writing to it (save or add, link, answer Brainside's questions, change, delete): `search_nodes`, `get_node`, `list_nodes`, `upsert_node`, `link`, `answer_node_questions`, `update_node` and `delete_node`. The skill now names the tools by intent, as in the server's catalog.
+- `list_apps`, `read_app_manual` and `get_app_schema` left the server: Apps are found through search, and `get_node` on an App gives its fields, manual and manual hash.
+- The server's own instructions now say the same as the skill.
+
+### Docs and repository
+
+- README: what changes in your AI, a four-step "Try it", compatibility, what your AI can do once connected, read-only connections, **Settings › Connected AIs**, and two new FAQ entries about what your AI saves on its own.
+- `INSTALL.md`: the server version this plugin needs, the save-or-read-only choice at login (the user decides), and nothing saved about the installation itself.
+- **ChatGPT custom instructions changed:** paste the new block from `chatgpt/custom-instructions.md`.
+- Examples and troubleshooting: proactive saving, client data with identifiers or copied from a client's system, changing a value, read-only connections, an older server, a save refused because of a secret.
 
 ## 0.1.1 — 2026-10-21
 
