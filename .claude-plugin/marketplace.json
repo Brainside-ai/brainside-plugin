@@ -10,7 +10,7 @@
     {
       "name": "brainside",
       "source": "./plugins/brainside",
-      "description": "Your Brainside memory inside your AI: searches what you already saved before answering, asks before saving or changing anything, never stores secrets.",
+      "description": "Your Brainside memory inside your AI: searches what you already saved before answering, saves new facts and tells you, asks before changing anything, never stores secrets.",
       "category": "productivity",
       "homepage": "https://github.com/brainside-ai/brainside-plugin#readme"
     }
