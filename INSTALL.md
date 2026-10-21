@@ -109,7 +109,7 @@ ChatGPT gets the MCP connector only, plus a text for the custom instructions. Th
 2. Name: `Brainside`. Server address: `https://api.brainside.ai/mcp`. Authentication: OAuth.
 3. Accept ChatGPT's notice, create it as a plugin, then log in to Brainside and authorize.
 4. In a conversation, turn on Brainside from the + menu.
-5. Paste the text from [chatgpt/instrucoes-personalizadas.md](chatgpt/instrucoes-personalizadas.md) into ChatGPT's custom instructions.
+5. Paste the text from [chatgpt/custom-instructions.md](chatgpt/custom-instructions.md) into ChatGPT's custom instructions.
 
 ChatGPT may ask the user to confirm each write. That is ChatGPT's own safety prompt.
 Menu names in ChatGPT change often. If a step does not match, look for "custom MCP server" or "Developer mode" in the settings.
