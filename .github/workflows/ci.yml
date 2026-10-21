@@ -1,0 +1,37 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Ações fixadas por SHA de commit (tag entre parênteses) para a tag não poder ser trocada por baixo.
+      - name: Checkout (v4.2.2)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      # JSON, manifestos, .mcp.json (endereço único), frontmatter da skill, nada de hooks/agents/bin,
+      # caminho exato brainside-ai/... nos textos. Gera dist/brainside-skill.zip. Só biblioteca padrão.
+      - name: Validar e gerar o ZIP da skill
+        run: python3 .github/scripts/validate.py
+
+      - name: Publicar o ZIP da skill (v4.6.2)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: brainside-skill
+          path: dist/brainside-skill.zip
+          if-no-files-found: error
+          retention-days: 30
