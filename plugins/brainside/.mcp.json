@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "brainside": {
+      "type": "http",
+      "url": "https://api.brainside.ai/mcp"
+    }
+  }
+}

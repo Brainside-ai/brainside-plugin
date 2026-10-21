@@ -1,0 +1,18 @@
+{
+  "name": "brainside",
+  "displayName": "Brainside",
+  "version": "0.1.0",
+  "description": "Your Brainside memory inside your AI. Adds the Brainside skill (when to search, when to save, when to ask first) and the Brainside MCP connector (https://api.brainside.ai/mcp, OAuth login on brainside.ai).",
+  "author": {
+    "name": "Brainside",
+    "email": "suporte@brainside.ai",
+    "url": "https://www.brainside.ai"
+  },
+  "homepage": "https://www.brainside.ai/recursos/mcp",
+  "repository": "https://github.com/brainside-ai/brainside-plugin",
+  "license": "Apache-2.0",
+  "keywords": ["brainside", "memory", "knowledge", "second-brain", "mcp"],
+  "supportUrl": "https://www.brainside.ai/suporte",
+  "privacyPolicyUrl": "https://www.brainside.ai/privacidade",
+  "termsOfServiceUrl": "https://www.brainside.ai/termos"
+}
