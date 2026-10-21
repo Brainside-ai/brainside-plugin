@@ -1,41 +1,32 @@
-# Segurança / Security
+# Security
 
-## Como reportar uma vulnerabilidade
+## How to report a vulnerability
 
-Não abra issue pública para falha de segurança.
+Do not open a public issue for a security problem.
 
-1. Use o reporte privado do GitHub: aba **Security** › **Report a vulnerability** neste repositório.
-2. Ou mande e-mail para **suporte@brainside.ai** com o assunto começando por `[security]`.
+1. Use GitHub's private reporting: the **Security** tab › **Report a vulnerability** in this repository.
+2. Or email **suporte@brainside.ai** with a subject starting with `[security]`.
 
+Include what is needed to reproduce it: steps, the plugin version (`version` in `plugins/brainside/.claude-plugin/plugin.json`), the AI client and its version. Do not include passwords, tokens or other people's personal data. Do not access, change or delete other people's data to prove the issue.
 
-Inclua o que for preciso para reproduzir: passos, versão do plugin (`version` em `plugins/brainside/.claude-plugin/plugin.json`), cliente de IA e versão. Não inclua senhas, tokens nem dados pessoais de terceiros. Não acesse, altere nem apague dados de outras pessoas para provar a falha.
+We reply through the same channel and let you know when the fix ships.
 
-Respondemos pelo mesmo canal e avisamos quando a correção sair.
+## What is in scope
 
-## O que está no escopo
+- This repository: the skill text, the manifests (`marketplace.json`, `plugin.json`) and `.mcp.json`.
+- The Brainside MCP server (`https://api.brainside.ai/mcp`) and the OAuth login at brainside.ai.
 
-- Este repositório: o texto da skill, os manifestos (`marketplace.json`, `plugin.json`) e o `.mcp.json`.
-- O servidor MCP do Brainside (`https://api.brainside.ai/mcp`) e o login OAuth em brainside.ai.
+Of particular interest: skill text that leads the AI to act against the user, a swapped MCP address, a flaw in login or consent, access to another account's data, and storing of secrets.
 
-Interessam em especial: texto na skill que leve a IA a agir contra o usuário, troca do endereço do MCP, falha no login ou no consentimento, acesso a dados de outra conta e gravação de segredos.
+## How the plugin protects itself
 
-## Como o plugin se protege
+- Only text and one address: no hooks, agents, commands or executables. CI rejects any of them.
+- CI also rejects a `.mcp.json` that points to any address other than `https://api.brainside.ai/mcp`.
+- What comes back from Brainside is treated as data: the skill tells the AI not to follow instructions found in notes, emails or pages.
+- The skill says never to store a password, token or key.
 
-- Só texto e um endereço: sem hooks, agents, comandos ou executáveis. O CI recusa a entrada de qualquer um deles.
-- O CI também recusa um `.mcp.json` que aponte para qualquer endereço diferente de `https://api.brainside.ai/mcp`.
-- O retorno do Brainside é tratado como dado: a skill manda a IA não seguir instruções encontradas em notas, e-mails ou páginas.
-- A skill manda nunca gravar senha, token ou chave.
+The `main` branch is protected and every change goes through a PR with review.
 
-A branch `main` é protegida e toda mudança passa por PR com review.
+## Check before installing
 
-## Confira antes de instalar
-
-O endereço do MCP em `plugins/brainside/.mcp.json` tem de ser `https://api.brainside.ai/mcp`, e o repositório tem de ser `brainside-ai/brainside-plugin`. A organização `brainside` no GitHub (sem `-ai`) não é do Brainside.
-
----
-
-## English
-
-Do not open public issues for security problems. Report privately through the repository's **Security** › **Report a vulnerability** tab, or by email to **suporte@brainside.ai** with a subject starting with `[security]`. Include reproduction steps, the plugin version and your AI client and version; never include passwords, tokens or other people's personal data, and do not access or change other people's data to prove an issue.
-
-In scope: this repository (skill text, manifests, `.mcp.json`) and the Brainside MCP server at `https://api.brainside.ai/mcp`, including its OAuth login. The plugin ships only text and one address, with no hooks, agents, commands or executables, and CI rejects any MCP address other than `https://api.brainside.ai/mcp`.
+The MCP address in `plugins/brainside/.mcp.json` must be `https://api.brainside.ai/mcp`, and the repository must be `brainside-ai/brainside-plugin`. The GitHub organization `brainside` (without `-ai`) is not Brainside.
