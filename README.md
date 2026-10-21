@@ -1,66 +1,140 @@
-# Brainside plugin
+<h1 align="center">Brainside</h1>
 
-Plugin oficial do [Brainside](https://www.brainside.ai) para Claude Code, claude.ai e Codex, com o texto equivalente para o ChatGPT. Ele liga a sua IA à sua memória no Brainside: antes de responder, ela busca o que você já guardou; quando você conta algo que vale guardar, ela grava e avisa; e pede o seu OK antes de mudar ou apagar qualquer coisa.
+<p align="center">
+  <strong>Your memory and your way of working, in any AI.</strong><br>
+  Official <a href="https://www.brainside.ai">Brainside</a> plugin for Claude Code, claude.ai and Codex — and the equivalent for ChatGPT.
+</p>
 
-*English below.*
-
-## O que vem no plugin
-
-- **Skill `brainside`**: só texto. Diz à IA quando buscar, quando gravar sozinha, quando pedir OK e o que nunca gravar.
-- **Conector MCP**: aponta para `https://api.brainside.ai/mcp`. O login é feito na página do Brainside, no navegador. Não há chave de API.
-
-Não vem: hooks, agents, comandos nem executáveis (`bin/`). O plugin não roda código na sua máquina.
-
-## Instalação
-
-O caminho é sempre `brainside-ai/brainside-plugin`. A organização `brainside` no GitHub (sem `-ai`) não é do Brainside.
-
-| Cliente | Como instalar |
-|---|---|
-| Claude Code | `claude plugin install brainside --marketplace brainside-ai/brainside-plugin` e depois `/mcp` › Brainside › Authenticate |
-| claude.ai | Customize › Plugins › Add › Add marketplace › `brainside-ai/brainside-plugin`; depois, na aba Connectors do plugin, adicione o Brainside e entre na sua conta |
-| Codex | `codex plugin marketplace add brainside-ai/brainside-plugin` e instale pelo `/plugins` |
-| ChatGPT | Só o conector MCP (`https://api.brainside.ai/mcp`) mais o texto de [chatgpt/instrucoes-personalizadas.md](chatgpt/instrucoes-personalizadas.md) |
-
-Passo a passo completo, escrito para a sua IA seguir: [INSTALL.md](INSTALL.md). Dá para pedir à própria IA: "instale o Brainside seguindo https://github.com/brainside-ai/brainside-plugin/blob/main/INSTALL.md".
-
-## Atualização automática
-
-A skill evolui junto com o Brainside. Ligue a atualização automática para não ficar com uma versão velha:
-
-- **Claude Code:** vem desligada para marketplaces de terceiros. Numa sessão, abra `/plugin` › Marketplaces › `brainside-ai` › Enable auto-update. Para atualizar na mão: `claude plugin update brainside@brainside-ai`.
-- **claude.ai:** ao adicionar o marketplace, ligue "Sync automatically". O que é instalado no claude.ai também chega ao Claude Code de quem entra com a mesma conta, já atualizado.
-- **Codex:** `codex plugin marketplace upgrade brainside-ai`.
-- **ChatGPT:** não há atualização automática do texto. Confira este repositório de vez em quando.
-
-## Segurança
-
-Um plugin com atualização automática é um caminho direto para a sua IA, por isso ele é mínimo: texto e um endereço. Antes de instalar, confira que o `.mcp.json` aponta para `https://api.brainside.ai/mcp`. Para reportar uma vulnerabilidade, veja [SECURITY.md](SECURITY.md).
-
-## Para quem mantém este repositório
-
-- Cada release sobe o `version` em `plugins/brainside/.claude-plugin/plugin.json`. Sem subir o `version`, quem já instalou não recebe a mudança. O `version` fica só no `plugin.json`, nunca também na entrada do `marketplace.json`.
-- Validação local: `python3 .github/scripts/validate.py` (o mesmo que o CI roda) e, com o Claude Code instalado, `claude plugin validate .` e `claude plugin validate plugins/brainside`.
-- O CI gera `dist/brainside-skill.zip`, o ZIP da skill para upload em claude.ai › Customize › Skills (a pasta `brainside/` no topo do ZIP, como o claude.ai exige).
-- Mudança no endereço do MCP, no `marketplace.json` ou no texto da skill passa por review.
-
-## Licença
-
-[Apache-2.0](LICENSE).
+<p align="center">
+  <a href="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="LICENSE"><img alt="License Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue"></a>
+  <img alt="Status: beta" src="https://img.shields.io/badge/status-beta-orange">
+</p>
 
 ---
 
-## English
+## Why it exists
 
-Official [Brainside](https://www.brainside.ai) plugin for Claude Code, claude.ai and Codex, plus an equivalent text for ChatGPT. It connects your AI to your Brainside memory: the AI searches what you already saved before answering, saves new durable knowledge and tells you, and asks before changing or deleting anything. The plugin holds only text (the `brainside` skill) and the MCP connector address `https://api.brainside.ai/mcp`, with login on the Brainside page. No hooks, agents, commands or executables.
+Every new AI starts from zero. You explain again who is who, what you already decided, how you like things done — and when you switch tools, you lose it all again.
 
-Install:
+Brainside keeps that knowledge **once**, in your account, and hands it to **any AI you connect**. This plugin is the bridge: it teaches your AI to use Brainside on its own, without you having to say "save this" or "look that up".
 
-- Claude Code: `claude plugin install brainside --marketplace brainside-ai/brainside-plugin`, then `/mcp` › Brainside › Authenticate.
-- claude.ai: Customize › Plugins › Add › Add marketplace › `brainside-ai/brainside-plugin`, then add the connector in the plugin's Connectors tab.
-- Codex: `codex plugin marketplace add brainside-ai/brainside-plugin`, then install it from `/plugins`.
-- ChatGPT: add the MCP server `https://api.brainside.ai/mcp` and paste the English block from [chatgpt/instrucoes-personalizadas.md](chatgpt/instrucoes-personalizadas.md).
+## What changes in your AI
 
-Turn on auto-update: in Claude Code, `/plugin` › Marketplaces › `brainside-ai` › Enable auto-update (off by default for third-party marketplaces); on claude.ai, turn on "Sync automatically"; in Codex, run `codex plugin marketplace upgrade brainside-ai`.
+| Situation | What the AI does |
+|---|---|
+| You ask about your projects, people, clients or decisions | **Searches Brainside before answering** and says where the answer came from |
+| You mention something worth keeping (a decision, a new person, a deadline) | **Saves it on its own and tells you in one line**: "Saved to your Brainside: …" |
+| The change alters or deletes something that already exists, touches your rules, involves sensitive data or came from an external source (email, web page, someone else's file) | **Asks first** and only writes with your yes |
+| A password, key or token shows up | **Never stores it**, even if you ask — and suggests a password manager |
 
-Step-by-step instructions written for AI assistants: [INSTALL.md](INSTALL.md). Security reports: [SECURITY.md](SECURITY.md). License: Apache-2.0.
+Rules and manuals that **you** wrote or approved count as instructions. What comes from someone else (a template author, another member, imported content) reaches the AI as **information**, never as an order.
+
+## How it works
+
+```
+  Your AI (Claude, Codex, ChatGPT…)
+        │   "brainside" skill: when to search, when to save, when to ask
+        │   MCP connector:     https://api.brainside.ai/mcp   (OAuth login at brainside.ai)
+        ▼
+  Brainside — stores, organizes, searches and delivers
+        │
+        └── the same memory in every AI you connect
+```
+
+Brainside **stores, organizes, searches and delivers**. **Your** AI reads, thinks and acts. Brainside does not run a language model over your knowledge to decide for you.
+
+## Installation
+
+> The official address is always **`brainside-ai/brainside-plugin`**. The GitHub organization `brainside` (without `-ai`) is not Brainside.
+
+### Claude Code
+
+```bash
+claude plugin install brainside --marketplace brainside-ai/brainside-plugin
+```
+
+Then, in a session: `/mcp` › **Brainside** › **Authenticate**. Your browser opens the Brainside login; sign in and authorize.
+
+### claude.ai (web, desktop and mobile)
+
+1. **Customize › Plugins › Add › Add marketplace** and type `brainside-ai/brainside-plugin`.
+2. Add the **Brainside** plugin.
+3. In the plugin's **Connectors** tab, add Brainside and sign in to your account.
+
+Skills need code execution turned on in the claude.ai settings. The Free plan allows one custom connector. What you install in claude.ai also shows up in Claude Code for anyone signed in with the same account.
+
+### Codex
+
+```bash
+codex plugin marketplace add brainside-ai/brainside-plugin
+```
+
+Install it from `/plugins`. If the connector does not show up: `codex mcp add brainside --url https://api.brainside.ai/mcp` and `codex mcp login brainside`.
+
+### ChatGPT
+
+ChatGPT does not install plugins from a repository. Add the MCP server `https://api.brainside.ai/mcp` as a custom app and paste the text from [`chatgpt/custom-instructions.md`](chatgpt/custom-instructions.md) into the custom instructions.
+
+### Let your AI install it
+
+In Claude Code or Codex, you can ask the AI itself:
+
+> Install Brainside following https://github.com/brainside-ai/brainside-plugin/blob/main/INSTALL.md
+
+[`INSTALL.md`](INSTALL.md) is written for AIs: exact steps, what to check and where to stop and ask for your OK.
+
+## First steps
+
+Once connected, try this in a new conversation, without mentioning Brainside:
+
+- "I met Ana, she's a designer at Acme and will take care of our website." → the AI saves it and tells you.
+- "Who's in charge of the website again?" → the AI searches and answers with what you saved.
+- "We decided to close the quarter with no new hires." → it becomes a decision linked to the project.
+- "Delete Ana's note." → the AI asks for confirmation first.
+
+In every connected AI, the same memory.
+
+## Updates
+
+Every change to this repository goes through a pull request with green CI, and each version is recorded in the [`CHANGELOG.md`](CHANGELOG.md).
+
+- **Claude Code:** `claude plugin update brainside@brainside-ai`
+- **Codex:** `codex plugin marketplace upgrade brainside-ai`
+- **claude.ai:** when you add the marketplace, you choose whether it syncs on its own.
+
+The plugin is just text, but it is text that guides your AI. That is why we recommend reading the changelog before updating.
+
+## Privacy and security
+
+- **The data travels, the power does not.** The plugin ships only the skill (text) and the connector address. It has no hooks, commands, agents or executables, and it does not run code on your machine.
+- **You log in to Brainside, never to the AI.** The connection is made through OAuth on the Brainside page. No password, key or token goes through the conversation.
+- **You control each connection.** In Brainside, under Settings › Connected AIs, you see which AIs have access, what each one can do, and you can revoke access at any time.
+- **Check before installing:** the file [`plugins/brainside/.mcp.json`](plugins/brainside/.mcp.json) must point to `https://api.brainside.ai/mcp`.
+- **Found a vulnerability?** See [`SECURITY.md`](SECURITY.md) — reports are private.
+
+## Troubleshooting
+
+The AI cannot find the Brainside tools, the login expired, the connector does not show up: see the [troubleshooting guide](plugins/brainside/skills/brainside/references/troubleshooting.md) or [brainside.ai/instalar](https://www.brainside.ai/instalar).
+
+## Structure
+
+```
+.claude-plugin/marketplace.json          catalog (Claude Code, claude.ai and Codex read the same format)
+plugins/brainside/.claude-plugin/plugin.json
+plugins/brainside/.mcp.json              MCP connector (HTTP + OAuth)
+plugins/brainside/skills/brainside/      the skill: SKILL.md and references
+chatgpt/custom-instructions.md           equivalent text for ChatGPT
+INSTALL.md                               installation written for AIs
+```
+
+## For maintainers
+
+- Each release bumps `version` in `plugins/brainside/.claude-plugin/plugin.json` (only there, never also in `marketplace.json`) and gets an entry in `CHANGELOG.md`.
+- Validation: `python3 .github/scripts/validate.py` (the same as CI) and, with Claude Code, `claude plugin validate .`.
+- CI builds `dist/brainside-skill.zip`, the skill ZIP for upload at claude.ai › Customize › Skills.
+- The `main` branch is protected: changes only land through a pull request with review and green CI.
+
+## License
+
+[Apache-2.0](LICENSE). The license grants no rights to the Brainside trademark.
