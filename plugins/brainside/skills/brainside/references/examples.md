@@ -1,6 +1,6 @@
 # Examples
 
-The example utterances below are in Portuguese, to illustrate Portuguese-speaking users (a large share of Brainside users); the replies you would give in those cases are shown in Portuguese too. Always answer in the user's language.
+The user utterances below are in Portuguese, as many Brainside users speak it, and so are the sample replies. Always answer in the user's language.
 
 In these examples the user is in their personal space ("Pessoal"). In version 0.1.x you ask before every save.
 

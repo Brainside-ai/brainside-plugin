@@ -4,11 +4,14 @@
 Usage: python3 .github/scripts/validate.py [ROOT]
 
 ROOT is the repository to check. It defaults to the repository that contains this script.
-On pull requests, CI also runs the copy of this script from main against the pull request's
-tree, so a change to these checks only takes effect after it is merged.
+On pull requests, CI also runs main's copy of this script against the pull request's tree.
+A pull request can change the CI workflow too, so changes under .github/ still need a careful
+read before they are merged.
 
-Every check is an allowlist: a file, manifest key, address, command or character that is
-not listed here fails. Standard library only. Errors exit with code 1; warnings only print.
+Every check is an allowlist: a file, manifest key, URL, e-mail domain, command or character
+that is not listed here fails. In Markdown, a word shaped like a host name fails unless it is
+an allowed host or a file name with a known extension; an IPv4 address fails in every file.
+Standard library only. Errors exit with code 1; warnings only print.
 """
 
 from __future__ import annotations
@@ -42,6 +45,9 @@ MCP_JSON = "plugins/brainside/.mcp.json"
 SKILL_DIR = "plugins/brainside/skills/brainside/"
 SKILLS_ROOT = "plugins/brainside/skills/"
 CHANGELOG = "CHANGELOG.md"
+README = "README.md"
+CHATGPT = "chatgpt/custom-instructions.md"
+CHATGPT_LIMIT = 1500  # characters in ChatGPT's custom instructions field
 SELF = ".github/scripts/validate.py"
 
 # Every file the repository may track. Any other path fails, wherever it is.
@@ -134,6 +140,11 @@ EXACT_URLS = {
     "https://www.apache.org/licenses/LICENSE-2.0",
     "http://www.w3.org/2000/svg",                  # SVG namespace
 }
+# In Markdown, a word shaped like a host name whose last part is not in HOST_TLDS passes only
+# as a file name with one of these extensions, and only when no path follows it ("x.md/..."
+# is read as a host).
+FILE_EXTENSIONS = {"md", "py", "json", "svg", "zip", "toml", "yml", "yaml", "sh", "txt"}
+IPV4_RE = re.compile(r"(?<![\w.])(?:\d{1,3}\.){3}\d{1,3}(?![\w]|\.\d)")
 EMAIL_DOMAIN = "brainside.ai"
 PLUGIN_IDS = {"brainside-ai", "synced"}
 REPO_NAMES = {"brainside-plugin", "brainside-plugin.git"}
@@ -367,11 +378,20 @@ def check_addresses(path: str, text: str) -> None:
                 f"@{EMAIL_DOMAIN} ({m.group(0)})")
     masked = mask(masked, email_spans)
 
+    for m in IPV4_RE.finditer(masked):
+        err(f"{path}:{line_of(text, m.start())}: IP addresses are not allowed ({m.group(0)})")
+
+    markdown = path.endswith(".md")
     for m in HOST_RE.finditer(masked):
         host, tld = m.group(1).lower(), m.group(2).lower()
-        if tld not in HOST_TLDS:
-            continue
         where = f"{path}:{line_of(text, m.start())}"
+        if tld not in HOST_TLDS:
+            if markdown and host not in BARE_HOSTS:
+                tail = TAIL_RE.match(masked, m.end()).group(0).rstrip(".,;:!?")
+                if tld not in FILE_EXTENSIONS or re.match(r"/|:\d", tail):
+                    err(f"{where}: '{host}{tail}' looks like a host name that is not on the "
+                        f"allowlist (file names may end in .{', .'.join(sorted(FILE_EXTENSIONS))})")
+            continue
         if host not in BARE_HOSTS:
             err(f"{where}: host '{host}' is not on the allowlist")
             continue
@@ -516,6 +536,35 @@ def check_changelog(version: str | None, texts: dict[str, str]) -> None:
     if not re.search(rf"^## (?:\[{v}\]|{v})(?=\s|$)", texts[CHANGELOG], re.M):
         err(f"{CHANGELOG}: no entry for version {version} "
             f"(a heading '## [{version}]' or '## {version}')")
+
+
+def check_readme_version(version: str | None, texts: dict[str, str]) -> None:
+    """The static version badge and its alt text in the README must match plugin.json."""
+    if version is None or README not in texts:
+        return
+    text = texts[README]
+    for m in re.finditer(r"img\.shields\.io/badge/version-(.+?)-[0-9A-Fa-f]{3,8}(?=[\"'\s)])", text):
+        shown = re.sub(r"--|__|_", lambda x: {"--": "-", "__": "_", "_": " "}[x.group(0)],
+                       m.group(1))
+        if shown != version:
+            err(f"{README}:{line_of(text, m.start())}: version badge shows {shown}, "
+                f"plugin.json has {version}")
+    for m in re.finditer(r"alt=\"Version ([^\"]+)\"", text):
+        if m.group(1) != version:
+            err(f"{README}:{line_of(text, m.start())}: badge alt text says Version {m.group(1)}, "
+                f"plugin.json has {version}")
+
+
+def check_chatgpt(texts: dict[str, str]) -> None:
+    """The block under '## Instructions' must fit ChatGPT's custom instructions field."""
+    if CHATGPT not in texts:
+        return
+    m = re.search(r"^## Instructions\s*\n+```text\n(.*?)\n```", texts[CHATGPT], re.M | re.S)
+    if not m:
+        err(f"{CHATGPT}: no ```text block under '## Instructions'")
+    elif len(m.group(1)) > CHATGPT_LIMIT:
+        err(f"{CHATGPT}: the instructions block has {len(m.group(1))} characters "
+            f"(ChatGPT's field holds {CHATGPT_LIMIT})")
 
 
 # --- Skill ------------------------------------------------------------------------------------
@@ -669,6 +718,8 @@ def main(argv: list[str]) -> int:
     version = check_plugin_json(texts)
     check_mcp_json(texts)
     check_changelog(version, texts)
+    check_readme_version(version, texts)
+    check_chatgpt(texts)
     check_skill(texts)
 
     if not errors:

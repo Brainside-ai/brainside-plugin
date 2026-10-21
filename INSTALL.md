@@ -10,7 +10,7 @@ This file is written for an AI assistant that a user asked to "install Brainside
 | Plugin repository | GitHub `brainside-ai/brainside-plugin` |
 | Marketplace name | `brainside-ai` |
 | Plugin name | `brainside` (install id `brainside@brainside-ai`) |
-| Human-readable guide | https://www.brainside.ai/instalar |
+| Install guide on the Brainside site | https://www.brainside.ai/instalar |
 
 The GitHub organization named `brainside` (without `-ai`) is not Brainside. Never install from it.
 
@@ -80,7 +80,7 @@ You cannot click for the user. `[ask the user]` to follow these steps:
 3. Add the Brainside plugin from that marketplace.
 4. In the plugin's Connectors tab, Brainside shows "Not added". Add it. The Brainside login opens; log in and authorize.
 
-Then Brainside works on claude.ai, in the desktop and mobile apps, and in Claude Code for anyone who logs in to Claude Code with the same claude.ai account (it shows there as `brainside@synced`).
+Then Brainside works on claude.ai, in the desktop and mobile apps, and in Claude Code when the user signs in with the same claude.ai account (it shows there as `brainside@synced`).
 
 Updates: read `CHANGELOG.md` first, then Customize › Plugins › the `brainside-ai` marketplace › Check for updates.
 
@@ -98,13 +98,13 @@ Connector only (Free plan, or without the plugin): `[ask the user]` to open Cust
 
 2. `[AI runs]`, after a yes: `codex plugin add brainside@brainside-ai`. If your Codex version does not have that command, `[ask the user]` to run `/plugins`, open the `brainside-ai` marketplace and install Brainside.
 3. `[ask the user]` Start a new session. When Codex asks to authenticate the Brainside server, the user logs in on the Brainside page.
-4. `[AI runs]` Check that the Brainside tools are available with a read-only search. If they are not, see "MCP server only" below.
+4. `[AI runs]` Check that the Brainside tools are available with a read-only search. If they are not, see "Connector only" below.
 
 **Codex in the ChatGPT desktop app:** `[ask the user]` to open the Plugins tab, add the `brainside-ai/brainside-plugin` marketplace if it is not listed, install Brainside and log in when asked.
 
-**Codex IDE extension:** it does not support plugins. Use "MCP server only" below; the skill is not available there.
+**Codex IDE extension:** it does not support plugins. Use "Connector only" below; the skill is not available there.
 
-**MCP server only:** `[AI runs]`, after a yes:
+**Connector only:** `[AI runs]`, after a yes:
 
 ```bash
 codex mcp add brainside --url https://api.brainside.ai/mcp
@@ -121,7 +121,7 @@ Updates: read `CHANGELOG.md` first, then `[AI runs]`, after a yes, `codex plugin
 
 ## ChatGPT
 
-ChatGPT gets the MCP server, added by hand as a custom plugin, plus a text for the custom instructions. The skill does not go in.
+ChatGPT gets the connector, added by hand as a custom MCP server, plus custom instructions that stand in for the skill.
 
 Requirements: custom MCP servers need a paid ChatGPT plan. On Business, Enterprise and Edu workspaces, an admin may have to allow them (Developer mode).
 
@@ -131,7 +131,7 @@ Requirements: custom MCP servers need a paid ChatGPT plan. On Business, Enterpri
 2. Name: `Brainside`. Server address: `https://api.brainside.ai/mcp`. Authentication: OAuth.
 3. Accept ChatGPT's notice ("I understand and want to continue"), choose Create as a plugin, then log in to Brainside and authorize.
 4. In a new conversation, type @ and pick Brainside (in some versions it is under the + menu).
-5. Paste the text from [chatgpt/custom-instructions.md](chatgpt/custom-instructions.md) into ChatGPT's custom instructions.
+5. Paste the block from [chatgpt/custom-instructions.md](chatgpt/custom-instructions.md) into ChatGPT's custom instructions.
 
 ChatGPT may ask the user to confirm each write. That is ChatGPT's own safety prompt.
 Menu names in ChatGPT change often. If a step does not match, look for "custom MCP server" or "Developer mode" in the settings.

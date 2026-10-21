@@ -9,11 +9,9 @@ Do not open a public issue for a security problem.
 
 Include what is needed to reproduce it: steps, the plugin version (`version` in `plugins/brainside/.claude-plugin/plugin.json`), the AI client and its version. Do not include passwords, tokens or other people's personal data. Do not access, change or delete other people's data to prove the issue.
 
-We reply through the same channel and let you know when the fix ships.
-
 ## What is in scope
 
-- This repository: the skill and its references, the ChatGPT text, `INSTALL.md`, the manifests (`marketplace.json`, `plugin.json`) and `.mcp.json`.
+- This repository: the skill and its references, the ChatGPT custom instructions, `INSTALL.md`, the manifests (`marketplace.json`, `plugin.json`) and `.mcp.json`.
 - The Brainside MCP server (`https://api.brainside.ai/mcp`) and the OAuth login at brainside.ai.
 - Copies that pose as this plugin: a repository, page or package that claims to be the official Brainside plugin or points an AI to another Brainside address.
 
@@ -21,7 +19,7 @@ Of particular interest: text that leads the AI to act against the user or to sen
 
 ## What the plugin does not do
 
-The plugin is only text and one address: the `brainside` skill (Markdown files) and the MCP connector address `https://api.brainside.ai/mcp`.
+The plugin is only text and one address: the `brainside` skill (Markdown files) and the connector address `https://api.brainside.ai/mcp`.
 
 - It has no hooks, commands, agents, monitors, scripts or executables. It runs no code on your machine.
 - It never handles your password. You log in on the Brainside page, through OAuth.
