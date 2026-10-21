@@ -1,0 +1,95 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # Read-only: validates the tagged tree, checks tag == version and builds the release files.
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      # Actions are pinned by commit SHA (the release tag is in the step name).
+      - name: Checkout (actions/checkout v7.0.1)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Validate and build the skill ZIP
+        run: python3 .github/scripts/validate.py .
+
+      - name: Check that the tag matches the plugin version
+        run: |
+          set -euo pipefail
+          version="$(python3 -c 'import json; print(json.load(open("plugins/brainside/.claude-plugin/plugin.json", encoding="utf-8"))["version"])')"
+          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match plugin.json version $version (expected v$version)."
+            exit 1
+          fi
+          echo "Tag $GITHUB_REF_NAME matches plugin.json version $version."
+
+      - name: Write the SHA-256 checksum and the release notes
+        run: |
+          set -euo pipefail
+          (cd dist && sha256sum brainside-skill.zip > brainside-skill.zip.sha256 && cat brainside-skill.zip.sha256)
+          python3 - <<'EOF'
+          import json, pathlib, re
+          version = json.load(open("plugins/brainside/.claude-plugin/plugin.json", encoding="utf-8"))["version"]
+          changelog = pathlib.Path("CHANGELOG.md").read_text(encoding="utf-8")
+          v = re.escape(version)
+          m = re.search(rf"^## (?:\[{v}\]|{v})(?=\s|$)[^\n]*\n(.*?)(?=^## |\Z)", changelog, re.M | re.S)
+          notes = m.group(1).strip() if m else ""
+          notes += "\n\nRead CHANGELOG.md before you update. `brainside-skill.zip.sha256` holds the SHA-256 of `brainside-skill.zip`.\n"
+          pathlib.Path("dist/release-notes.md").write_text(notes.lstrip(), encoding="utf-8")
+          EOF
+
+      - name: Upload the release files (actions/upload-artifact v7.0.2)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: release-files
+          path: |
+            dist/brainside-skill.zip
+            dist/brainside-skill.zip.sha256
+            dist/release-notes.md
+          if-no-files-found: error
+          retention-days: 1
+
+  # The only job that can write: it runs no code from the repository, only publishes the files.
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Download the release files (actions/download-artifact v8.0.2)
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: release-files
+          path: release
+
+      - name: Check the SHA-256 checksum
+        working-directory: release
+        run: sha256sum --check brainside-skill.zip.sha256
+
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          prerelease=()
+          case "$GITHUB_REF_NAME" in *-*) prerelease=(--prerelease) ;; esac
+          gh release create "$GITHUB_REF_NAME" \
+            release/brainside-skill.zip release/brainside-skill.zip.sha256 \
+            --verify-tag --title "Brainside plugin $GITHUB_REF_NAME" \
+            --notes-file release/release-notes.md ${prerelease[@]+"${prerelease[@]}"}

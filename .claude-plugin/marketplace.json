@@ -10,9 +10,9 @@
     {
       "name": "brainside",
       "source": "./plugins/brainside",
-      "description": "Your Brainside memory inside your AI: searches what you already saved before answering, saves new durable knowledge and tells you, asks before changing or deleting anything.",
+      "description": "Your Brainside memory inside your AI: searches what you already saved before answering, asks before saving or changing anything, never stores secrets.",
       "category": "productivity",
-      "homepage": "https://www.brainside.ai/recursos/mcp"
+      "homepage": "https://github.com/brainside-ai/brainside-plugin#readme"
     }
   ]
 }
