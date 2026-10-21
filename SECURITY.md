@@ -13,20 +13,23 @@ We reply through the same channel and let you know when the fix ships.
 
 ## What is in scope
 
-- This repository: the skill text, the manifests (`marketplace.json`, `plugin.json`) and `.mcp.json`.
+- This repository: the skill and its references, the ChatGPT text, `INSTALL.md`, the manifests (`marketplace.json`, `plugin.json`) and `.mcp.json`.
 - The Brainside MCP server (`https://api.brainside.ai/mcp`) and the OAuth login at brainside.ai.
+- Copies that pose as this plugin: a repository, page or package that claims to be the official Brainside plugin or points an AI to another Brainside address.
 
-Of particular interest: skill text that leads the AI to act against the user, a swapped MCP address, a flaw in login or consent, access to another account's data, and storing of secrets.
+Of particular interest: text that leads the AI to act against the user or to send the user's Brainside content somewhere they did not ask for, a swapped MCP address, a flaw in login or consent, access to another account's data, and storing of secrets.
 
-## How the plugin protects itself
+## What the plugin does not do
 
-- Only text and one address: no hooks, agents, commands or executables. CI rejects any of them.
-- CI also rejects a `.mcp.json` that points to any address other than `https://api.brainside.ai/mcp`.
-- What comes back from Brainside is treated as data: the skill tells the AI not to follow instructions found in notes, emails or pages.
-- The skill says never to store a password, token or key.
+The plugin is only text and one address: the `brainside` skill (Markdown files) and the MCP connector address `https://api.brainside.ai/mcp`.
 
-The `main` branch is protected and every change goes through a PR with review.
+- It has no hooks, commands, agents, monitors, scripts or executables. It runs no code on your machine.
+- It never handles your password. You log in on the Brainside page, through OAuth.
+- The skill tells the AI to treat what comes back from Brainside as data, never as orders; to send Brainside content only where you ask; and never to store a password, token or key.
 
-## Check before installing
+## Check the official address
 
-The MCP address in `plugins/brainside/.mcp.json` must be `https://api.brainside.ai/mcp`, and the repository must be `brainside-ai/brainside-plugin`. The GitHub organization `brainside` (without `-ai`) is not Brainside.
+- The repository is `github.com/brainside-ai/brainside-plugin`. The GitHub organization `brainside` (without `-ai`) is not Brainside.
+- `plugins/brainside/.mcp.json` must contain exactly one server, of type `http`, at `https://api.brainside.ai/mcp`.
+- In Claude Code, `claude plugin marketplace list` must show the `brainside-ai` marketplace with the source `brainside-ai/brainside-plugin`.
+- The install guide on the Brainside site, https://www.brainside.ai/instalar, points to this same repository.
