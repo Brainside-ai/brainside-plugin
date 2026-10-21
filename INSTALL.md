@@ -51,8 +51,7 @@ Steps:
    On older versions: `claude plugin marketplace add brainside-ai/brainside-plugin`, then `claude plugin install brainside@brainside-ai`.
    If the clone fails with an SSH error, set `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` and run it again.
 
-2. Turn on automatic updates. Third-party marketplaces start with auto-update off, so without this step the skill gets old. Only the user can do it, inside a session: `/plugin` › Marketplaces › `brainside-ai` › Enable auto-update.
-   Without auto-update, update by hand with `claude plugin update brainside@brainside-ai`.
+2. Updates: when a new version comes out (see CHANGELOG.md in the repository), update with `claude plugin update brainside@brainside-ai`. Do not turn on auto-update on the user's behalf; that is their choice.
 
 3. Load the plugin: start a new session, or run `/reload-plugins` in the open one.
 
@@ -65,7 +64,7 @@ Steps:
 You cannot click for the user. Give them these steps:
 
 1. On claude.ai, open Customize › Plugins › Add › Add marketplace.
-2. Type `brainside-ai/brainside-plugin` and confirm. Turn on "Sync automatically" so the plugin stays up to date.
+2. Type `brainside-ai/brainside-plugin` and confirm. Automatic sync is the user's choice.
 3. Add the Brainside plugin from that marketplace.
 4. In the plugin's Connectors tab, Brainside shows "Not added". Add it. The Brainside login opens; log in and authorize.
 5. Skills need code execution turned on in the claude.ai settings.
