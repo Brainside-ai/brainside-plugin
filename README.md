@@ -58,7 +58,7 @@ Brainside itself is a hosted service at [brainside.ai](https://www.brainside.ai)
 | When | Your AI |
 |---|---|
 | You ask about your people, projects, clients or decisions | Searches Brainside before answering, and tells you what came from there |
-| You ask what you did on a day ("what did I do yesterday?") | Opens that day in your Brainside and lists what was saved in that space that day, all of it, page by page. Nothing saved that day means just that, not that nothing happened |
+| You ask what you did on a day ("what did I do yesterday?") | Opens that day in your Brainside and lists, page by page, what Brainside recorded in that space that day: notes saved or changed, your edits on the Brainside screen, the Curator's changes and, from an imported vault, that day's daily note and the notes dated that day or linked to it. App records and files are not in it; your AI also checks your Apps that have a date field. Days are recorded since 2026-10-21: for an earlier day, your AI says Brainside has no record of it and that what a search finds is partial. Nothing recorded that day means just that, not that nothing happened |
 | You mention something worth keeping: a decision and its reason, a new person, a deadline | Saves it on its own and tells you in one line what it saved and where: "Saved to your Brainside (<space>): …" |
 | A save would change or delete something, touch your rules, agents or Apps, or involve sensitive, external or client data | Asks first, says why (for example, "this changes an existing note" or "this is health data") and shows you what will change |
 | Brainside isn't sure, for example whether something is a new version of an existing note | Nothing is overwritten. Brainside keeps both and asks; your AI answers, or asks you when the answer isn't obvious |
@@ -175,7 +175,7 @@ If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. 
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
-| **0.3.1** | The release of 2026-10-22 that opens a day's hub (`episodio:YYYY-MM-DD`) and pages `backlinks`, or later | As in 0.3.0. For "what did I do on <date>?", opens that day and lists everything saved in that space that day, page by page |
+| **0.3.1** | The release of 2026-10-22 that opens a day's hub (`episodio:YYYY-MM-DD`) and pages `backlinks`, or later | As in 0.3.0. For "what did I do on <date>?", opens that day and lists, page by page, what Brainside recorded in that space that day (notes, not App records or files) |
 | **0.3.0** | The release that adds `create_upload` and `get_upload`, or later | As in 0.2.0, plus files: sends them with a one-time upload link, or gives you a Brainside upload page |
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |

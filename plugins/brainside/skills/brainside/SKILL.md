@@ -68,7 +68,14 @@ Do not search for general-knowledge questions, small talk, or tasks that do not 
 
 ### "What did I do on <date>?"
 
-Do not search a day by text. Call `get_node({dedup_key: "episodio:YYYY-MM-DD"})` with the day the user asked for, in Brasilia time (UTC-3): work out "yesterday" or "last Friday" from today's date there, and open that day even when a search brought back another day's hub. Its backlinks with `relacao` "registrado em" (Portuguese for "recorded on") are what was saved that day in this space: by the user's AIs, by their edits on the Brainside screen and by Brainside's Curator; from an imported vault, only the notes dated that day and what that day's daily note cited. `get_node` brings the first 50; above that (`backlinks_total`), continue with `backlinks({id, offset: 50})`, then with each `proximo_offset` it returns, until none comes back. Not found means nothing was saved in this space that day, not that nothing happened: say it that way.
+Do not search a day by text. Call `get_node({dedup_key: "episodio:YYYY-MM-DD"})` with the day the user asked for, in Brasilia time (UTC-3): work out "yesterday" or "last Friday" from today's date there, and open that day even when a search brought back another day's hub. `get_node` brings the first 50 backlinks; above that (`backlinks_total`), continue with `backlinks({id, offset: 50})`, then with each `proximo_offset` it returns, until none comes back. In those backlinks, the day's record in this space is:
+
+- `relacao` "registrado em" (Portuguese for "recorded on"): notes saved with `upsert_node` or `update_node` that day, the user's edits on the Brainside screen and the changes Brainside's Curator applied; from an imported vault, the notes dated that day and the notes linked to or from that day's daily note;
+- `relacao` "sobre" ("about") from an item of kind `evento`: that day's daily note itself.
+
+The day leaves out App records (`create_record`, `create_records_in_batch`, `update_record`), files (`create_upload`, `upload_attachment`) and links made with `link`. When the question may involve them, also look in the Apps that have a date field: `list_records` with that field in `filters`, or `search_records` with the date. Answer with what was recorded, never as "everything the user did".
+
+Brainside keeps this record of each day since 2026-10-21; before that, only imported daily notes got a day. For an earlier day, tell the user Brainside does not have the record of that day, use what the day lists if it opens, then look with `search_nodes` (the date in the text) and `list_nodes({mes: "YYYY-MM"})`, and say the result is partial. From 2026-10-21 on, a day not found means nothing was recorded in this space that day: say it that way, never that the user did nothing.
 
 ## 2. Saving: on your own, with a one-line notice
 
