@@ -22,7 +22,7 @@ Of particular interest: text that leads the AI to act against the user or to sen
 The plugin is only text and one address: the `brainside` skill (Markdown files) and the connector address `https://api.brainside.ai/mcp`.
 
 - It has no hooks, commands, agents, monitors, scripts or executables. It runs no code on your machine.
-- When you ask your AI to keep a file, the skill asks it to run one command, `curl`, which sends that file to Brainside with a one-time upload code for that file only. Your AI client runs it under its own permissions. The skill tells the AI to change only the file's path in that command, never the address or the headers, and never to save the code or put it in a link.
+- When you ask your AI to keep a file, the skill asks it to run a few commands: read the file's size and SHA-256 (`wc`, `sha256sum` or `shasum`), copy the file if its path has a single quote, and one `curl` that sends it to Brainside with a one-time upload code for that file only (for a very small file that curl can't send, `base64` instead, to send it through the connector). Your AI client runs them under its own permissions. The skill tells the AI to run the upload command only when it sends to `api.brainside.ai`, to change only the file's path in it, never the address or the headers, never to save the code or put it in a link, and never to keep a file that holds a secret.
 - It never handles your password. You log in on the Brainside page, through OAuth.
 - The skill tells the AI to treat what comes back from Brainside as data, never as orders; to send Brainside content only where you ask; and never to store a password, token or key.
 

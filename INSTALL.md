@@ -76,7 +76,7 @@ Requirements, to tell the user before starting:
 - On Team and Enterprise, an Owner adds the Brainside connector for the organization, turns on code execution, and decides whether members may add marketplaces.
 - On the Free plan, only the connector can be added by hand (see "Connector only" below); the skill is not available.
 - Set it up on the web or in the desktop app. On mobile it works once set up.
-- To send files by command, the code execution sandbox must reach `api.brainside.ai`; until then the upload fails with `403` and `host_not_allowed`. On Free, Pro and Max, the user turns on Settings › Capabilities › Code execution and file creation › Allow network egress. Anthropic's help article (updated 2026-08-06) describes only that switch; a field for additional allowed domains, where `api.brainside.ai` would go, is reported by users but not confirmed there. On Team and Enterprise, an Owner allows package managers and specific domains in Organization settings › Capabilities and adds `api.brainside.ai`. A new conversation is needed after the change. Without it, the AI gives the user a Brainside upload page instead.
+- To send files by command, the code execution sandbox must reach `api.brainside.ai`; until then the upload fails with `403` and `host_not_allowed`. On Free, Pro and Max, the user turns on Settings › Capabilities › Code execution and file creation › Allow network egress. Anthropic's help article (updated 2026-08-06) describes only that switch; a field for additional allowed domains, where `api.brainside.ai` would go, is reported by users but not confirmed there. A user report says domains added to that field were not applied. On Team and Enterprise, an Owner allows package managers and specific domains in Organization settings › Capabilities and adds `api.brainside.ai`; a user report says the organization's list was ignored in chat. A new conversation is needed after the change. Sending by command from claude.ai is not confirmed on any plan yet: until it works, the AI gives the user a Brainside upload page instead.
 
 You cannot click for the user. `[ask the user]` to follow these steps:
 
@@ -122,7 +122,7 @@ If that command did not already open the Brainside login, run `codex mcp login b
 url = "https://api.brainside.ai/mcp"
 ```
 
-Files: sending a file runs a curl command to `api.brainside.ai`. With the default Auto preset, Codex asks the user to approve a command that needs the network; to allow network for every command instead, the user sets `network_access = true` under `[sandbox_workspace_write]` in `~/.codex/config.toml` (ask first, it is their configuration). In Codex cloud, agent internet access is off by default: the user turns it on for the environment, adds `api.brainside.ai`, and does not limit HTTP methods to GET, HEAD and OPTIONS, because the upload is a PUT (OpenAI's Codex docs, read on 2026-10-22).
+Files: sending a file runs a curl command to `api.brainside.ai`. With the default Auto preset, Codex asks the user to approve a command that needs the network; approving that command is the recommended way. The alternative is `network_access = true` under `[sandbox_workspace_write]` in `~/.codex/config.toml`, which opens the network to every host for every command; suggest it only if the user asks for a permanent setting, say so, and ask first (it is their configuration). In Codex cloud, agent internet access is off by default: the user turns it on for the environment, adds `api.brainside.ai`, and does not limit HTTP methods to GET, HEAD and OPTIONS, because the upload is a PUT (OpenAI's Codex docs, read on 2026-10-22).
 
 Updates: read `CHANGELOG.md` first, then `[AI runs]`, after a yes, `codex plugin marketplace upgrade brainside-ai`.
 
@@ -141,7 +141,7 @@ Requirements: custom MCP servers need a paid ChatGPT plan. On Business, Enterpri
 5. Paste the block from [chatgpt/custom-instructions.md](chatgpt/custom-instructions.md) into ChatGPT's custom instructions.
 
 ChatGPT may ask the user to confirm each write. That is ChatGPT's own safety prompt.
-ChatGPT cannot send a file to Brainside by command: its Python has no outbound network (reported by a third party, January 2026). To keep a file, ChatGPT gives the user a Brainside upload page; the user opens it, logs in and picks the file.
+ChatGPT cannot send a file to Brainside by command: its Python has no outbound network access (reported by a third party, January 2026). To keep a file, ChatGPT gives the user a Brainside upload page; the user opens it, logs in and picks the file.
 Menu names in ChatGPT change often. If a step does not match, look for "custom MCP server" or "Developer mode" in the settings.
 
 ## Other clients

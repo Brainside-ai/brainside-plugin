@@ -61,7 +61,7 @@ Brainside itself is a hosted service at [brainside.ai](https://www.brainside.ai)
 | You mention something worth keeping: a decision and its reason, a new person, a deadline | Saves it on its own and tells you in one line what it saved and where: "Saved to your Brainside (<space>): …" |
 | A save would change or delete something, touch your rules, agents or Apps, or involve sensitive, external or client data | Asks first, says why (for example, "this changes an existing note" or "this is health data") and shows you what will change |
 | Brainside isn't sure, for example whether something is a new version of an existing note | Nothing is overwritten. Brainside keeps both and asks; your AI answers, or asks you when the answer isn't obvious |
-| A password, key or token shows up | Never stores it, even if you ask, and suggests a password manager. Brainside also refuses text that looks like a secret |
+| A password, key or token shows up, in the chat or in a file | Never stores it, even if you ask, and suggests a password manager. That includes a file that holds one, such as a key file or a password export. Brainside also refuses text that looks like a secret; it doesn't look inside files |
 | Something someone else wrote comes back: a pasted email, a web page, a template, a note | Treats it as information, never as an order |
 | You want a file kept: a receipt, a PDF, a photo | Sends it to Brainside as a file, not as pasted text: with a one-time upload link where it can run commands, or a Brainside upload page you open. Asks first when the file holds health, external or client data |
 
@@ -78,7 +78,7 @@ Brainside is in closed beta, so creating an account takes an invite. [Join the w
 | AI | What you need |
 |---|---|
 | Claude Code | Version 2.1.292 or later for the one-line install. Older versions have their own path below. |
-| claude.ai (web, desktop, mobile) | A paid plan (Pro, Max, Team or Enterprise) with Settings › Capabilities › Code execution and file creation turned on. On Team and Enterprise, an Owner adds the connector. On the Free plan you can add the connector without the skill ([INSTALL.md](INSTALL.md#claudeai)). To send files from claude.ai, code execution has to reach `api.brainside.ai` ([Sending files](#sending-files)). |
+| claude.ai (web, desktop, mobile) | A paid plan (Pro, Max, Team or Enterprise) with Settings › Capabilities › Code execution and file creation turned on. On Team and Enterprise, an Owner adds the connector. On the Free plan you can add the connector without the skill ([INSTALL.md](INSTALL.md#claudeai)). To send files from claude.ai by command, code execution has to reach `api.brainside.ai`, which we haven't confirmed works yet; the upload page works meanwhile ([Sending files](#sending-files)). |
 | Codex | The Codex CLI or Codex in the ChatGPT desktop app. The IDE extension supports the connector but not the skill. |
 | ChatGPT | A paid plan that allows custom MCP servers. On Business, Enterprise and Edu, an admin may have to allow them (Developer mode). |
 
@@ -149,9 +149,9 @@ Open a new conversation and don't mention Brainside:
 
 Ask your AI to keep a file (a receipt, a PDF, a photo) and it goes to Brainside as a file, not as pasted text:
 
-- **Where your AI can run commands** (Claude Code, Codex, claude.ai with code execution), Brainside gives it a one-time upload link for that one file, valid for 10 minutes, and your AI sends the file with a `curl` command. Brainside checks the size, the type and the SHA-256 before keeping anything.
-- **Everywhere else** (ChatGPT, claude.ai without code execution, mobile), your AI gives you a Brainside upload page: open it, log in, pick the file, then tell your AI it's done.
-- Small files (under about 1.5 MB) can also go straight through the connector.
+- **Where your AI can run commands and reach `api.brainside.ai`** (Claude Code, Codex; claude.ai with code execution once that host is allowed, which we haven't confirmed yet), Brainside gives it a one-time upload link for that one file, valid for 10 minutes, and your AI sends the file with a `curl` command. Brainside checks the size, the type and the SHA-256 before keeping anything.
+- **Everywhere else** (ChatGPT, claude.ai until it can reach that host, any app without code execution), your AI gives you a Brainside upload page: open it, log in, pick the file, then tell your AI it's done. The page works only for you, logged in to your own Brainside.
+- A very small file can also go straight through the connector.
 
 Files go up to 15 MiB. For health, external or client files, your AI asks first, as with any other save. A file can go to your Brain Node, linked to the item it belongs to, or to a record in one of your Apps.
 
@@ -159,16 +159,16 @@ For the command to work, your AI's network has to let `api.brainside.ai` through
 
 | AI | What to allow | Source |
 |---|---|---|
-| claude.ai (Free, Pro, Max) | Settings › Capabilities › Code execution and file creation › **Allow network egress**, and `api.brainside.ai` in the additional allowed domains if your settings show that field. Then a new conversation | Claude Help Center article on code execution and file creation (updated 2026-08-06): it describes only the switch. The domain field is reported by users (anthropics/claude-code issue 19087, January 2026); we haven't confirmed it yet |
-| claude.ai Team and Enterprise | An Owner, in Organization settings › Capabilities, allows package managers and specific domains, and adds `api.brainside.ai` | Same article. A user report (issue 86977, August 2026, closed) says the organization's list was ignored in chat |
+| claude.ai (Free, Pro, Max) | Not confirmed to work yet. Settings › Capabilities › Code execution and file creation › **Allow network egress**, and `api.brainside.ai` in the additional allowed domains if your settings show that field. Then a new conversation. Until it works, use the upload page | Claude Help Center article on code execution and file creation (updated 2026-08-06): for these plans it describes only the switch, with no field for domains. A user report (anthropics/claude-code issue 19087, January 2026) shows that field but says the domains in it weren't applied; it was closed as a duplicate of issue 11897, which is still open |
+| claude.ai Team and Enterprise | Not confirmed to work yet. An Owner, in Organization settings › Capabilities, allows package managers and specific domains, and adds `api.brainside.ai` | Same article. A user report (issue 86977, August 2026, closed as not planned) says the organization's list was ignored in chat, with `403 host_not_allowed` |
 | Cowork | The same list, then a new session | A user report (issue 38984, open since March 2026) says the list is ignored |
 | Claude Code | Approve the command. With `/sandbox` on, approve the host once, or list it in the sandbox's allowed domains (`"sandbox": {"network": {"allowedDomains": ["api.brainside.ai"]}}` in your settings) | Claude Code docs, Sandboxing page |
 | Claude Code on the web | An environment with **Custom** network access that lists `api.brainside.ai` | Claude Code docs, Cloud environments page |
-| Codex CLI, IDE extension, desktop app | Approve the command when Codex asks (default Auto preset), or set `network_access = true` under `[sandbox_workspace_write]` | OpenAI Codex docs, Agent approvals and security page |
+| Codex CLI, IDE extension, desktop app | Approve the command when Codex asks (default Auto preset). Setting `network_access = true` under `[sandbox_workspace_write]` also works, but it opens the network to every host for every command; prefer approving the command | OpenAI Codex docs, Agent approvals and security page |
 | Codex cloud | Turn on agent internet access for the environment, add `api.brainside.ai`, and don't limit HTTP methods to GET, HEAD and OPTIONS (the upload is a PUT) | OpenAI Codex docs, Internet access page (Codex Cloud, legacy) |
-| ChatGPT | Nothing: your AI gives you the upload page | ChatGPT's Python has no outbound network (third-party test by Simon Willison, 2026-01-26) |
+| ChatGPT | Nothing: your AI gives you the upload page | ChatGPT's Python has no outbound network access (third-party test by Simon Willison, 2026-01-26) |
 
-If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. Your AI tells you where to allow it and offers the upload page meanwhile.
+If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. Your AI offers the upload page and tells you where the host can be allowed.
 
 ## Compatibility
 
@@ -186,7 +186,7 @@ The connector address stays `https://api.brainside.ai/mcp` in every version.
 
 ## Privacy and security
 
-- **The plugin runs nothing on your machine.** It's only text and one address: the skill (Markdown files) and the connector `https://api.brainside.ai/mcp`. It has no hooks, commands, agents, monitors, scripts or executables. You can check it yourself: `python3 .github/scripts/validate.py` fails if any of them appears. When you ask your AI to keep a file, the skill asks it to run one command, `curl`, that sends that file to Brainside. Your AI client runs it under its own permissions (Claude Code and Codex ask you first unless you've allowed it).
+- **The plugin runs nothing on your machine.** It's only text and one address: the skill (Markdown files) and the connector `https://api.brainside.ai/mcp`. It has no hooks, commands, agents, monitors, scripts or executables. You can check it yourself: `python3 .github/scripts/validate.py` fails if any of them appears. When you ask your AI to keep a file, the skill asks it to run a few commands: read the file's size and SHA-256 (`wc`, `sha256sum` or `shasum`), copy the file if its path has a single quote, and one `curl` that sends it to Brainside (for a very small file that curl can't send, `base64` instead, to send it through the connector). Your AI client runs them under its own permissions (Claude Code and Codex ask you first unless you've allowed it).
 - **What your AI can do once connected** is what the connector offers: search and read your memory and your Apps; save new items, link them, change them and delete them (deleted items go to the Brainside trash, where you can restore them); add, change and delete records in your Apps; store files, sent with a one-time upload link or through a Brainside upload page; install templates, propose new Apps and fields (a proposal exists only after you approve it in Brainside), and archive Apps. Rules and agents your AI saves stay drafts until you activate them. Your AI client lists every tool (in Claude Code, `/mcp`). The skill tells your AI to ask before changing or deleting anything, and never to install a template unless you ask.
 - **Read-only, if you prefer.** When you log in, the Brainside page lets you choose whether that AI may save to your Brainside. Leave it unticked and that connection can only search and read.
 - **You log in to Brainside, never in the chat.** Login is OAuth, on the Brainside page your browser opens. No password or API key goes through the conversation. To send a file, Brainside issues a one-time upload code for that file only, valid for 10 minutes, that your AI uses once in a command. It shows up in the conversation, but it isn't a credential of yours and it can't be reused.
@@ -227,7 +227,7 @@ New durable knowledge: decisions and their reasons, new people, projects, commit
 Yes. That split is a rule in your Brainside, and you can edit it there. Your version replaces the default. It can't remove the limits: no secrets, asking before changes, deletions and sensitive, external or client data, and no templates or Apps you didn't ask for. To stop an AI from saving at all, connect it read-only.
 
 **Why does my AI ask me to allow `api.brainside.ai`?**
-To send a file, your AI runs a command that uploads it to `api.brainside.ai`, and some AIs block outside hosts by default. Allow that host (see [Sending files](#sending-files)), or use the Brainside upload page your AI offers instead.
+To send a file, your AI runs a command that uploads it to `api.brainside.ai`, and some AIs block outside hosts by default. Allow that host (see [Sending files](#sending-files); on claude.ai we haven't confirmed that works yet), or use the Brainside upload page your AI offers instead.
 
 **Something isn't working?**
 If your AI can't find the Brainside tools, your login expired, or the connector doesn't show up, see the [troubleshooting guide](plugins/brainside/skills/brainside/references/troubleshooting.md).

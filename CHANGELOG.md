@@ -19,12 +19,13 @@ Files, for the Brainside server release that adds `create_upload` and `get_uploa
 ### What changes for you
 
 - **Files your AI keeps for you.** Ask your AI to keep a receipt, a PDF or a photo and it goes to Brainside as a file, never as pasted text: to your Brain Node, linked to the item it belongs to, or to a record in one of your Apps. Up to 15 MiB per file.
-- **Where your AI can run commands** (Claude Code, Codex, claude.ai with code execution), Brainside gives it a one-time upload link for that one file, valid for 10 minutes, and your AI sends the file with a `curl` command. Brainside checks the size, the type and the SHA-256 before keeping anything. Your AI changes only the file's path in that command, never the address or the headers.
-- **Where it can't** (ChatGPT, claude.ai without code execution, mobile), your AI gives you a Brainside upload page: you open it, log in and pick the file.
-- **Small files** (under about 1.5 MB) can still go straight through the connector. Your AI now sends their size and SHA-256 too, and Brainside refuses the file if they don't match.
+- **Where your AI can run commands and reach `api.brainside.ai`** (Claude Code, Codex; claude.ai with code execution once that host is allowed, which we haven't confirmed yet), Brainside gives it a one-time upload link for that one file, valid for 10 minutes, and your AI sends the file with a `curl` command. Brainside checks the size, the type and the SHA-256 before keeping anything. Your AI changes only the file's path in that command, never the address or the headers.
+- **Where it can't** (ChatGPT, claude.ai until it can reach that host, any app without code execution), your AI gives you a Brainside upload page: you open it, log in and pick the file. The page works only for you, logged in to your own Brainside.
+- **Very small files** can still go straight through the connector. Your AI now sends their size and SHA-256 too, measured with a command, and Brainside refuses the file if they don't match.
+- **No files with secrets.** Your AI never keeps a file that is or holds a secret (a key or credentials file, a password export), even if you ask: Brainside doesn't look inside files for secrets.
 - **Asks first** before keeping a file with health, biometric, identity or bank data, a file that came from someone else (an exam, an invoice, a contract) or a client's file. Brainside itself refuses an external file unless your AI says you agreed.
 - **The upload code is not a password of yours.** It works once, for one file, for 10 minutes, and goes only in the upload command. The skill tells your AI never to save it or put it in a link. No password or API key of yours goes through the conversation.
-- **Allowing `api.brainside.ai`.** Some AIs block outside hosts. If the upload fails with `host_not_allowed`, your AI tells you where to allow `api.brainside.ai` (claude.ai: Settings › Capabilities, or an Owner on Team and Enterprise; Claude Code sandbox; Codex) and offers the upload page meanwhile. The README lists, per AI, what to allow and where we read it.
+- **Allowing `api.brainside.ai`.** Some AIs block outside hosts. If the upload fails with `host_not_allowed`, your AI offers the upload page and tells you where the host can be allowed: approving the command in Claude Code and Codex, or the Claude Code sandbox's allowed domains. On claude.ai (Settings › Capabilities, or an Owner on Team and Enterprise) we haven't confirmed that allowing it works yet, and users report that the list is not always applied. The README lists, per AI, what to allow and where we read it.
 
 ### What the skill expects from the server
 
@@ -34,8 +35,8 @@ Files, for the Brainside server release that adds `create_upload` and `get_uploa
 
 ### Docs and repository
 
-- Skill: a new "Files" part in section 3 (when to use the upload link, base64 or the upload page; what to do with each answer), the upload code set apart from secrets, and the tools table.
-- Examples and troubleshooting: files in Claude Code and in ChatGPT, a health exam (ask first), `host_not_allowed`, a hash mismatch, a note asking to send a file somewhere, and a new "Sending a file" section with what each client needs and what each answer of the upload means.
+- Skill: a new "Files" part in section 3 (when to use the upload link, base64 or the upload page; what to do with each response; never a file that holds a secret; run the command and share the page only when they point to Brainside, and never pass them to anyone else), the upload code set apart from secrets, and the tools table.
+- Examples and troubleshooting: files in Claude Code and in ChatGPT, a health exam (ask first), `host_not_allowed`, a hash mismatch, a note asking to send a file somewhere, a request to forward the upload link, a credentials file (never), and a new "Sending a file" section with what each client needs and what each upload response means.
 - README: a "Sending files" section with what to allow in each AI, its source and the date we checked; privacy notes on the upload command and the one-time code; a new FAQ entry; compatibility.
 - `INSTALL.md`: the upload host, and what to allow for files in claude.ai, Claude Code, Codex, ChatGPT and other clients.
 - **ChatGPT custom instructions changed:** paste the new block from `chatgpt/custom-instructions.md` (1,492 of 1,500 characters).
