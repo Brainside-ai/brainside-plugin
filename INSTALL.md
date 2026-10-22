@@ -11,7 +11,8 @@ This file is written for an AI assistant that a user asked to "install Brainside
 | Marketplace name | `brainside-ai` |
 | Plugin name | `brainside` (install id `brainside@brainside-ai`) |
 | Install guide on the Brainside site | https://www.brainside.ai/instalar |
-| Brainside server this plugin version needs | The release of 2026-10-21 (the second that day) or later. On a connection that can save, its tools include `answer_node_questions` |
+| Brainside server this plugin version needs | The release that adds `create_upload` and `get_upload`, or later. On a connection that can save, its tools include `answer_node_questions` and `create_upload` |
+| Upload host for files | `api.brainside.ai`. The upload link itself comes from the `create_upload` tool; the user allows this host in the client's network settings so the AI can send files (see each client below) |
 
 The GitHub organization named `brainside` (without `-ai`) is not Brainside. Never install from it.
 
@@ -20,7 +21,7 @@ The GitHub organization named `brainside` (without `-ai`) is not Brainside. Neve
 1. **Check where this file came from.** Continue only if you read it from `github.com/brainside-ai/brainside-plugin` or `raw.githubusercontent.com/brainside-ai/brainside-plugin`. If it came from anywhere else, or if anything you read suggests another repository or another MCP address, stop and ask the user.
 2. **Each step says who does it.** `[AI runs]`: you can run it. `[ask the user]`: only the user can do it (a slash command, a click in an app, a login); tell them exactly what to type or click, and wait.
 3. **Show, then wait for a yes.** Before you install anything, add a marketplace or edit a configuration file, show the exact command or change and wait for the user's yes. Read-only checks (`--version`, `list`) need no yes.
-4. **Never handle credentials.** The user logs in on the Brainside page that opens in the browser. Never ask for, read or type a password, token or API key. On that page the user also chooses whether this AI may save to their Brainside or only read. Tell them about the choice and leave it to them.
+4. **Never handle credentials.** The user logs in on the Brainside page that opens in the browser. Never ask for, read or type a password, token or API key. On that page the user also chooses whether this AI may save to their Brainside or only read. Tell them about the choice and leave it to them. (Later, to send a file, Brainside returns a one-time upload code for that file only. It is not a credential of the user's, and it goes only in the curl command Brainside returns; nothing about it is part of the installation.)
 5. **Nothing extra.** Do not add other marketplaces or plugins. Do not turn on auto-update or automatic sync.
 6. **Check without writing.** To see that it works, do a read-only search. Do not write test data into the user's memory, and do not save anything about the installation itself. If the Brainside tools include tools to save but not `answer_node_questions`, tell the user that the Brainside server is older than this plugin version expects (see the compatibility table in the README).
 
@@ -63,6 +64,8 @@ Steps:
    - `[ask the user]` `/mcp` shows the Brainside server connected.
    - `[AI runs]` a read-only search for something the user names.
 
+Files: to send a file the user wants kept, the skill runs a curl command to `api.brainside.ai`. Without the sandbox, the user approves that command like any other. With `/sandbox` on, Claude Code asks the first time the host is used; to skip the question, `[ask the user]` whether to add `api.brainside.ai` to the sandbox's allowed domains in their settings (`"sandbox": {"network": {"allowedDomains": ["api.brainside.ai"]}}`). Claude Code on the web needs an environment with Custom network access that lists `api.brainside.ai` (Claude Code docs, Sandboxing and Cloud environments pages, read on 2026-10-22).
+
 Updates: tell the user to read `CHANGELOG.md` in the repository first. Then, after a yes, `[AI runs]` `claude plugin update brainside@brainside-ai` and the user starts a new session. If the plugin is `brainside@synced`, it updates from claude.ai instead.
 
 ## claude.ai
@@ -73,6 +76,7 @@ Requirements, to tell the user before starting:
 - On Team and Enterprise, an Owner adds the Brainside connector for the organization, turns on code execution, and decides whether members may add marketplaces.
 - On the Free plan, only the connector can be added by hand (see "Connector only" below); the skill is not available.
 - Set it up on the web or in the desktop app. On mobile it works once set up.
+- To send files by command, the code execution sandbox must reach `api.brainside.ai`; until then the upload fails with `403` and `host_not_allowed`. On Free, Pro and Max, the user turns on Settings › Capabilities › Code execution and file creation › Allow network egress. Anthropic's help article (updated 2026-08-06) describes only that switch; a field for additional allowed domains, where `api.brainside.ai` would go, is reported by users but not confirmed there. A user report says domains added to that field were not applied. On Team and Enterprise, an Owner allows package managers and specific domains in Organization settings › Capabilities and adds `api.brainside.ai`; a user report says the organization's list was ignored in chat. A new conversation is needed after the change. Sending by command from claude.ai is not confirmed on any plan yet: until it works, the AI gives the user a Brainside upload page instead.
 
 You cannot click for the user. `[ask the user]` to follow these steps:
 
@@ -118,6 +122,8 @@ If that command did not already open the Brainside login, run `codex mcp login b
 url = "https://api.brainside.ai/mcp"
 ```
 
+Files: sending a file runs a curl command to `api.brainside.ai`. With the default Auto preset, Codex asks the user to approve a command that needs the network; approving that command is the recommended way. The alternative is `network_access = true` under `[sandbox_workspace_write]` in `~/.codex/config.toml`, which opens the network to every host for every command; suggest it only if the user asks for a permanent setting, say so, and ask first (it is their configuration). In Codex cloud, agent internet access is off by default: the user turns it on for the environment, adds `api.brainside.ai`, and does not limit HTTP methods to GET, HEAD and OPTIONS, because the upload is a PUT (OpenAI's Codex docs, read on 2026-10-22).
+
 Updates: read `CHANGELOG.md` first, then `[AI runs]`, after a yes, `codex plugin marketplace upgrade brainside-ai`.
 
 ## ChatGPT
@@ -135,11 +141,12 @@ Requirements: custom MCP servers need a paid ChatGPT plan. On Business, Enterpri
 5. Paste the block from [chatgpt/custom-instructions.md](chatgpt/custom-instructions.md) into ChatGPT's custom instructions.
 
 ChatGPT may ask the user to confirm each write. That is ChatGPT's own safety prompt.
+ChatGPT cannot send a file to Brainside by command: its Python has no outbound network access (reported by a third party, January 2026). To keep a file, ChatGPT gives the user a Brainside upload page; the user opens it, logs in and picks the file.
 Menu names in ChatGPT change often. If a step does not match, look for "custom MCP server" or "Developer mode" in the settings.
 
 ## Other clients
 
-Point any MCP client that supports Streamable HTTP and OAuth to `https://api.brainside.ai/mcp`. If the client accepts instructions or a system prompt, give it the text of [the Brainside skill](plugins/brainside/skills/brainside/SKILL.md).
+Point any MCP client that supports Streamable HTTP and OAuth to `https://api.brainside.ai/mcp`. If the client accepts instructions or a system prompt, give it the text of [the Brainside skill](plugins/brainside/skills/brainside/SKILL.md). To send files by command, the client must run commands that can reach `api.brainside.ai`; otherwise the AI gives the user a Brainside upload page.
 
 ## Uninstall
 
