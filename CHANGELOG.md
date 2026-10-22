@@ -6,12 +6,31 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.4.0** | The release of the agents v2 (agents waiting for confirmation, the agent catalog in `list_spaces`), or later | As in 0.3.1. Every read starts with a search, even with an App's slug in hand. The agents it creates for you wait for your confirmation on the Brainside screen; it says when it uses an agent, and copies one elsewhere only when you ask |
 | **0.3.1** | The release of 2026-10-22 that opens a day's hub (`episodio:YYYY-MM-DD`) and pages `backlinks`, or later | As in 0.3.0. For "what did I do on <date>?", opens that day and lists, page by page, what Brainside recorded in that space that day (notes, not App records or files) |
 | **0.3.0** | The release that adds `create_upload` and `get_upload`, or later | As in 0.2.0, plus files: sends them with a one-time upload link, or gives you a Brainside upload page |
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, and for 0.3.1 when its `backlinks` tool also takes `offset`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, and for 0.4.0 when its `upsert_node` tool also takes `apps`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.4.0 — 2026-10-22
+
+Agents, for the Brainside server release of the agents v2, or later.
+
+### What changes for you
+
+- **Search first, always.** Your AI starts every read with a search, even when it already knows an App's slug. Opening the App directly missed the agents, rules and notes around it: in a test on 2026-10-22, a financial question went straight to the App and never met the finance agent.
+- **Your agents are known up front.** `list_spaces` now brings each space's agent catalog (name, role and Apps). Your AI knows Otto, your Tech Lead or your FinOps agent exist before any search, and still picks them by what the search finds.
+- **It tells you when it uses an agent.** "Consultando o Otto…": your AI says so and answers in that agent's role, even if the agent's own text says not to.
+- **Agents it creates wait for you.** An agent your AI creates in your own memory is usable right away when you ask for it by name, and becomes automatic once you confirm it on the Brainside screen (text, Apps and origin in view). It never becomes automatic on its own. A copied name, a reserved word, too many in a day from one connection, or a memory that is not yours makes it a draft instead.
+- **Taking an agent elsewhere.** When you ask, your AI copies a confirmed agent into another tool (a Claude Code subagent, another harness, another chat), keeps a reference to check for a newer version before using it, and asks before updating either side. It tells you plainly that Brainside cannot see or turn off a copy outside it.
+
+### What the skill expects from the server
+
+- `get_node` of an agent can return `nivel` "sob_pedido" with `aguardando_confirmacao` and `criado_por`, and `como_portar` for confirmed agents.
+- `upsert_node` with `forma: "agente"` takes `apps`, and its `recibo` says how the agent came out in `agente` (`sob_pedido`, or `rascunho` with a reason).
+- `list_spaces` returns `agentes` per space.
 
 ## 0.3.1 — 2026-10-22
 
