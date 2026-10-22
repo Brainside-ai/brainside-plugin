@@ -126,8 +126,10 @@ HOST_TLDS = {
     "online", "tech", "info", "biz", "us", "br", "uk", "de", "gg", "link", "page", "ly",
     "news", "store", "shop", "live", "pro", "cc", "tv", "ws",
 }
-# Host names that may be written without a URL. GitHub and api.brainside.ai still have their
-# path checked like a URL.
+# Host names that may be written without a URL. GitHub still has its path checked like a URL.
+# api.brainside.ai may stand alone (the host a user allows in an AI client's network settings,
+# to send files) or be followed by /mcp; any other path fails, and as a URL it may only be
+# MCP_URL (the upload address is never written down: it comes from the server's tool).
 BARE_HOSTS = {
     "brainside.ai", "www.brainside.ai", "api.brainside.ai", "github.com",
     "raw.githubusercontent.com", "claude.ai", "chatgpt.com",
@@ -397,8 +399,9 @@ def check_addresses(path: str, text: str) -> None:
             continue
         tail = TAIL_RE.match(masked, m.end()).group(0).rstrip(".,;:!?")
         if host == "api.brainside.ai":
-            if tail != "/mcp":
-                err(f"{where}: api.brainside.ai may only appear as {MCP_URL} ({host}{tail})")
+            if tail not in {"", "/mcp"}:
+                err(f"{where}: api.brainside.ai may only appear alone or as {MCP_URL} "
+                    f"({host}{tail})")
         elif host in {"github.com", "raw.githubusercontent.com"} and tail:
             problem = url_problem(f"https://{host}{tail}")
             if problem:
