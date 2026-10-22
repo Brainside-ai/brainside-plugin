@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="CHANGELOG.md"><img alt="Version 0.3.1" src="https://img.shields.io/badge/version-0.3.1-52514e"></a>
+  <a href="CHANGELOG.md"><img alt="Version 0.4.0" src="https://img.shields.io/badge/version-0.4.0-52514e"></a>
   <a href="#before-you-start"><img alt="Status: closed beta" src="https://img.shields.io/badge/status-closed_beta-52514e"></a>
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-52514e"></a>
 </p>
@@ -175,12 +175,13 @@ If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. 
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.4.0** | The release of the agents v2 (agents waiting for confirmation, the agent catalog in `list_spaces`), or later | As in 0.3.1. Every read starts with a search, even with an App's slug in hand; agents it creates wait for your confirmation on the Brainside screen, it says when it uses one, and copies one elsewhere only when you ask |
 | **0.3.1** | The release of 2026-10-22 that opens a day's hub (`episodio:YYYY-MM-DD`) and pages `backlinks`, or later | As in 0.3.0. For "what did I do on <date>?", opens that day and lists, page by page, what Brainside recorded in that space that day (notes, not App records or files) |
 | **0.3.0** | The release that adds `create_upload` and `get_upload`, or later | As in 0.2.0, plus files: sends them with a one-time upload link, or gives you a Brainside upload page |
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-How to tell your server is ready: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` for 0.2.0, and also `create_upload` for 0.3.0 (in Claude Code, `/mcp`); for 0.3.1, its `backlinks` tool also takes `offset`. With 0.3.0 on a server without `create_upload`, your AI sends only small files and tells you larger ones must wait. With 0.3.1 on a server whose `backlinks` takes no `offset`, your AI still opens the day you ask about and tells you the list may be incomplete. Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
+How to tell your server is ready: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` for 0.2.0, and also `create_upload` for 0.3.0 (in Claude Code, `/mcp`); for 0.3.1, its `backlinks` tool also takes `offset`; for 0.4.0, its `upsert_node` tool also takes `apps`. With 0.3.0 on a server without `create_upload`, your AI sends only small files and tells you larger ones must wait. With 0.3.1 on a server whose `backlinks` takes no `offset`, your AI still opens the day you ask about and tells you the list may be incomplete. Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
 
 Why 0.2.0 needs that release: on it, saving only creates or adds, and never overwrites. Changing an item takes a separate step that checks your AI read the latest version. On older servers, saving an item that already exists replaced its whole note, which is why 0.1.1 asks before every save.
 
