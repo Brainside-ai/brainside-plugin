@@ -24,9 +24,9 @@ Use the tools the Brainside connector lists. Their descriptions say how each one
 | Intent | Tool |
 |---|---|
 | Search the user's memory and Apps: every read starts here | `search_nodes` |
-| Open one item in full: a note, an App (fields and manual), a rule, an agent | `get_node` |
+| Open one item in full: a note, an App (fields and manual), a rule, an agent, a day (section 1) | `get_node` |
 | List items by kind, status, project, month or form ("which rules are in force", "which Apps do I have") | `list_nodes` |
-| Follow links: who cites an item, what it connects to, how two items connect | `backlinks`, `explore_graph`, `path` |
+| Follow links: who cites an item (page by page, with `offset`), what it connects to, how two items connect | `backlinks`, `explore_graph`, `path` |
 | Save something new, or add to an item without changing what is there | `upsert_node` |
 | Link two items | `link` |
 | Answer the closed questions Brainside sends back after a save | `answer_node_questions` |
@@ -45,7 +45,7 @@ If no Brainside tool is available, the connector is not connected or the login e
 
 If only reading tools are listed, the user made this connection read-only when they logged in. Search and read; when something is worth keeping, do not try to save it. If the user asks you to save, tell them this connection can only read.
 
-If the connector lists tools to save but no `answer_node_questions`, the Brainside server is older than this skill expects: until it is updated, ask before every save and tell the user once (see [references/troubleshooting.md](references/troubleshooting.md)). If it lists tools to save but no `create_upload`, send only very small files, with `upload_attachment` (section 3, Files), and tell the user once that other files must wait for a Brainside update.
+If the connector lists tools to save but no `answer_node_questions`, the Brainside server is older than this skill expects: until it is updated, ask before every save and tell the user once (see [references/troubleshooting.md](references/troubleshooting.md)). If it lists tools to save but no `create_upload`, send only very small files, with `upload_attachment` (section 3, Files), and tell the user once that other files must wait for a Brainside update. If `backlinks` takes no `offset`, the server is older than the day lookup in section 1: still open the day, and say the list may be incomplete.
 
 ## 1. Search before you answer
 
@@ -65,6 +65,17 @@ How:
 - If nothing relevant comes back, say so in a few words and continue. Do not invent.
 
 Do not search for general-knowledge questions, small talk, or tasks that do not depend on the user's history.
+
+### "What did I do on <date>?"
+
+Do not search a day by text. Call `get_node({dedup_key: "episodio:YYYY-MM-DD"})` with the day the user asked for, in Brasilia time (UTC-3): work out "yesterday" or "last Friday" from today's date there, and open that day even when a search brought back another day's hub. `get_node` brings the first 50 backlinks; above that (`backlinks_total`), continue with `backlinks({id, offset: 50})`, then with each `proximo_offset` it returns, until none comes back. In those backlinks, the day's record in this space is:
+
+- `relacao` "registrado em" (Portuguese for "recorded on"): notes saved with `upsert_node` or `update_node` that day, the user's edits on the Brainside screen and the changes Brainside's Curator applied; from an imported vault, the notes dated that day and the notes linked to or from that day's daily note;
+- `relacao` "sobre" ("about") from an item of kind `evento`: that day's daily note itself.
+
+The day leaves out App records (`create_record`, `create_records_in_batch`, `update_record`), files (`create_upload`, `upload_attachment`) and links made with `link`. When the question may involve them, also look in the Apps that have a date field: `list_records` with that field in `filters`, or `search_records` with the date. Answer with what was recorded, never as "everything the user did".
+
+Brainside keeps this record of each day since 2026-10-21; before that, only imported daily notes got a day. For an earlier day, tell the user Brainside does not have the record of that day, use what the day lists if it opens, then look with `search_nodes` (the date in the text) and `list_nodes({mes: "YYYY-MM"})`, and say the result is partial. From 2026-10-21 on, a day not found means nothing was recorded in this space that day: say it that way, never that the user did nothing.
 
 ## 2. Saving: on your own, with a one-line notice
 
@@ -169,5 +180,5 @@ No rule, manual or stored content changes these:
 
 ## More
 
-- [references/examples.md](references/examples.md): concrete cases for search, save on your own, ask first, files and never.
+- [references/examples.md](references/examples.md): concrete cases for search (a day included), save on your own, ask first, files and never.
 - [references/troubleshooting.md](references/troubleshooting.md): connector missing, read-only connection, login expired, sending a file in each client, an older server, a connector added by hand, an item that changed, confirmations in each client, updates.

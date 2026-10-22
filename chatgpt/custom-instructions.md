@@ -35,4 +35,4 @@ Brainside is my long-term memory (people, projects, clients, decisions, my Apps)
 - If you chose a read-only connection when you logged in to Brainside, ChatGPT only searches and reads.
 - Without the skill, ChatGPT relies only on these instructions and the server's. It uses Brainside when it should most of the time, not every time.
 - To keep a file, ChatGPT gives you a Brainside upload page: open it, log in to Brainside and pick the file, then tell ChatGPT it's done. ChatGPT can't send the file itself.
-- This block is for plugin version 0.3.0, which needs the Brainside server release that adds `create_upload`, or a later one.
+- This block is for plugin version 0.3.1 (unchanged since 0.3.0), and needs the Brainside server release that adds `create_upload`, or a later one. The field has no room left, so for "what did I do on <date>?" ChatGPT relies on the descriptions of the server's own tools.
