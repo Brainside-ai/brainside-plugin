@@ -6,13 +6,38 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.3.1** | The release of 2026-10-22 that opens a day's hub (`episodio:YYYY-MM-DD`) and pages `backlinks`, or later | As in 0.3.0. For "what did I do on <date>?", opens that day and lists everything saved in that space that day, page by page |
 | **0.3.0** | The release that adds `create_upload` and `get_upload`, or later | As in 0.2.0, plus files: sends them with a one-time upload link, or gives you a Brainside upload page |
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, and for 0.3.0 when it also lists `create_upload`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, and for 0.3.1 when its `backlinks` tool also takes `offset`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
 
-## 0.3.0 — Unreleased
+## 0.3.1 — 2026-10-22
+
+The day lookup, for the Brainside server release of 2026-10-22 that opens a day's hub and pages `backlinks`, or later.
+
+### What changes for you
+
+- **"What did I do yesterday?"** Ask your AI what you did on a day and it opens that day in your Brainside instead of searching by text: the day's hub, `episodio:YYYY-MM-DD`, with the day in Brasilia time. What it lists is what was saved that day in that space: by your AIs, by your edits on the Brainside screen and by Brainside's Curator. From an imported vault, only the notes dated that day and what that day's daily note cited.
+- **Long days come back whole.** Above 50 items, your AI reads the rest page by page instead of stopping at the first 50.
+- **Nothing saved is not nothing done.** When a day has no hub, your AI says nothing was saved in that space that day, never that you did nothing.
+
+### What the skill expects from the server
+
+- `get_node` with `dedup_key` `"episodio:YYYY-MM-DD"` opens the day's hub. Its backlinks with `relacao` "registrado em" are what was saved that day, the first 50 of them, with `backlinks_total`.
+- `backlinks` takes `offset` and returns `total` and, while there is more, `proximo_offset`.
+- If `backlinks` takes no `offset`, the server is older: your AI still opens the day and tells you the list may be incomplete.
+
+### Docs and repository
+
+- Skill: a "What did I do on <date>?" part at the end of section 1 (no section was renumbered), the day in the tools table, and the older-server case.
+- Examples: "O que eu fiz ontem?". Troubleshooting: the server this version needs, and a day on an older server.
+- README: a row in "What changes in your AI", and compatibility. `INSTALL.md`: the server this version needs.
+- ChatGPT custom instructions: the block is unchanged. The field has no room left, so ChatGPT relies on the descriptions of the server's own tools for a day.
+- This changelog: 0.3.0 now shows its release date, 2026-10-22.
+
+## 0.3.0 — 2026-10-22
 
 Files, for the Brainside server release that adds `create_upload` and `get_upload`. Update the plugin after that release is live.
 

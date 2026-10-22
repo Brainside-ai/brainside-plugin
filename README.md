@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="CHANGELOG.md"><img alt="Version 0.3.0" src="https://img.shields.io/badge/version-0.3.0-52514e"></a>
+  <a href="CHANGELOG.md"><img alt="Version 0.3.1" src="https://img.shields.io/badge/version-0.3.1-52514e"></a>
   <a href="#before-you-start"><img alt="Status: closed beta" src="https://img.shields.io/badge/status-closed_beta-52514e"></a>
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-52514e"></a>
 </p>
@@ -58,6 +58,7 @@ Brainside itself is a hosted service at [brainside.ai](https://www.brainside.ai)
 | When | Your AI |
 |---|---|
 | You ask about your people, projects, clients or decisions | Searches Brainside before answering, and tells you what came from there |
+| You ask what you did on a day ("what did I do yesterday?") | Opens that day in your Brainside and lists what was saved in that space that day, all of it, page by page. Nothing saved that day means just that, not that nothing happened |
 | You mention something worth keeping: a decision and its reason, a new person, a deadline | Saves it on its own and tells you in one line what it saved and where: "Saved to your Brainside (<space>): …" |
 | A save would change or delete something, touch your rules, agents or Apps, or involve sensitive, external or client data | Asks first, says why (for example, "this changes an existing note" or "this is health data") and shows you what will change |
 | Brainside isn't sure, for example whether something is a new version of an existing note | Nothing is overwritten. Brainside keeps both and asks; your AI answers, or asks you when the answer isn't obvious |
@@ -174,11 +175,12 @@ If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. 
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.3.1** | The release of 2026-10-22 that opens a day's hub (`episodio:YYYY-MM-DD`) and pages `backlinks`, or later | As in 0.3.0. For "what did I do on <date>?", opens that day and lists everything saved in that space that day, page by page |
 | **0.3.0** | The release that adds `create_upload` and `get_upload`, or later | As in 0.2.0, plus files: sends them with a one-time upload link, or gives you a Brainside upload page |
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-How to tell your server is ready: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` for 0.2.0, and also `create_upload` for 0.3.0 (in Claude Code, `/mcp`). With 0.3.0 on a server without `create_upload`, your AI sends only small files and tells you larger ones must wait. Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
+How to tell your server is ready: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` for 0.2.0, and also `create_upload` for 0.3.0 (in Claude Code, `/mcp`); for 0.3.1, its `backlinks` tool also takes `offset`. With 0.3.0 on a server without `create_upload`, your AI sends only small files and tells you larger ones must wait. With 0.3.1 on a server whose `backlinks` takes no `offset`, your AI still opens the day you ask about and tells you the list may be incomplete. Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
 
 Why 0.2.0 needs that release: on it, saving only creates or adds, and never overwrites. Changing an item takes a separate step that checks your AI read the latest version. On older servers, saving an item that already exists replaced its whole note, which is why 0.1.1 asks before every save.
 

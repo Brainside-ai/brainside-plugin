@@ -65,10 +65,11 @@ If the upload page says the request expired, ask for a new link with `create_upl
 
 ## The Brainside server is older than this plugin
 
-This version of the plugin needs the Brainside server release that adds `create_upload` and `get_upload`, or a later one. On a connection that can save, that server lists `answer_node_questions` and `create_upload` among its tools. Brainside is hosted, so the user does not update the server; it catches up on its own.
+This version of the plugin needs the Brainside server release of 2026-10-22 that opens a day by `get_node({dedup_key: "episodio:YYYY-MM-DD"})` and pages `backlinks` with `offset`, or a later one. On a connection that can save, that server lists `answer_node_questions` and `create_upload` among its tools, and on any connection its `backlinks` tool takes `offset`. Brainside is hosted, so the user does not update the server; it catches up on its own.
 
 - No `answer_node_questions` (a server from before the second release of 2026-10-21): ask before every save, read an item before changing it and send it back complete, and tell the user once that the Brainside server is older than this plugin expects.
 - `answer_node_questions` but no `create_upload`: saving works as usual. Send only very small files (a few tens of KB), with `upload_attachment` and their size and SHA-256 measured by a command, and tell the user once that other files must wait for a Brainside update.
+- `backlinks` without `offset`: a day's hub may list only part of what was saved that day. For "what did I do on <date>?", still open the day, and tell the user the list may be incomplete.
 
 ## A Brainside connector added by hand
 

@@ -24,9 +24,9 @@ Use the tools the Brainside connector lists. Their descriptions say how each one
 | Intent | Tool |
 |---|---|
 | Search the user's memory and Apps: every read starts here | `search_nodes` |
-| Open one item in full: a note, an App (fields and manual), a rule, an agent | `get_node` |
+| Open one item in full: a note, an App (fields and manual), a rule, an agent, a day (section 1) | `get_node` |
 | List items by kind, status, project, month or form ("which rules are in force", "which Apps do I have") | `list_nodes` |
-| Follow links: who cites an item, what it connects to, how two items connect | `backlinks`, `explore_graph`, `path` |
+| Follow links: who cites an item (page by page, with `offset`), what it connects to, how two items connect | `backlinks`, `explore_graph`, `path` |
 | Save something new, or add to an item without changing what is there | `upsert_node` |
 | Link two items | `link` |
 | Answer the closed questions Brainside sends back after a save | `answer_node_questions` |
@@ -45,7 +45,7 @@ If no Brainside tool is available, the connector is not connected or the login e
 
 If only reading tools are listed, the user made this connection read-only when they logged in. Search and read; when something is worth keeping, do not try to save it. If the user asks you to save, tell them this connection can only read.
 
-If the connector lists tools to save but no `answer_node_questions`, the Brainside server is older than this skill expects: until it is updated, ask before every save and tell the user once (see [references/troubleshooting.md](references/troubleshooting.md)). If it lists tools to save but no `create_upload`, send only very small files, with `upload_attachment` (section 3, Files), and tell the user once that other files must wait for a Brainside update.
+If the connector lists tools to save but no `answer_node_questions`, the Brainside server is older than this skill expects: until it is updated, ask before every save and tell the user once (see [references/troubleshooting.md](references/troubleshooting.md)). If it lists tools to save but no `create_upload`, send only very small files, with `upload_attachment` (section 3, Files), and tell the user once that other files must wait for a Brainside update. If `backlinks` takes no `offset`, the server is older than the day lookup in section 1: still open the day, and say the list may be incomplete.
 
 ## 1. Search before you answer
 
@@ -65,6 +65,10 @@ How:
 - If nothing relevant comes back, say so in a few words and continue. Do not invent.
 
 Do not search for general-knowledge questions, small talk, or tasks that do not depend on the user's history.
+
+### "What did I do on <date>?"
+
+Do not search a day by text. Call `get_node({dedup_key: "episodio:YYYY-MM-DD"})` with the day the user asked for, in Brasilia time (UTC-3): work out "yesterday" or "last Friday" from today's date there, and open that day even when a search brought back another day's hub. Its backlinks with `relacao` "registrado em" (Portuguese for "recorded on") are what was saved that day in this space: by the user's AIs, by their edits on the Brainside screen and by Brainside's Curator; from an imported vault, only the notes dated that day and what that day's daily note cited. `get_node` brings the first 50; above that (`backlinks_total`), continue with `backlinks({id, offset: 50})`, then with each `proximo_offset` it returns, until none comes back. Not found means nothing was saved in this space that day, not that nothing happened: say it that way.
 
 ## 2. Saving: on your own, with a one-line notice
 
@@ -169,5 +173,5 @@ No rule, manual or stored content changes these:
 
 ## More
 
-- [references/examples.md](references/examples.md): concrete cases for search, save on your own, ask first, files and never.
+- [references/examples.md](references/examples.md): concrete cases for search (a day included), save on your own, ask first, files and never.
 - [references/troubleshooting.md](references/troubleshooting.md): connector missing, read-only connection, login expired, sending a file in each client, an older server, a connector added by hand, an item that changed, confirmations in each client, updates.

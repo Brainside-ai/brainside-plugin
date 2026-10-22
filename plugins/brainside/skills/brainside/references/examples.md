@@ -11,6 +11,7 @@ In these examples the user is in their personal space ("Pessoal") and the connec
 | "Quem é a Marina mesmo?" | Search "Marina". Answer from what the user saved, and say it came from Brainside. |
 | "Vamos fechar o orçamento da reforma." | Search "reforma" before writing anything: earlier decisions, suppliers, budget limits, and the rules that apply. |
 | "Escreve o e-mail pro cliente no formato de sempre." | Search for the client and for a rule about the format. Follow it if Brainside marks it as the user's own rule ("regra_do_usuario"). |
+| "O que eu fiz ontem?" (asked on 2026-10-22, Brasilia time) | A day, not a text search. Call `get_node({dedup_key: "episodio:2026-10-21"})` and answer from its "registrado em" backlinks: "Ontem ficou registrado no seu Brainside (Pessoal): …". With `backlinks_total` above 50, read the rest with `backlinks` and `offset` first. Not found: "Não há nada gravado no seu Brainside (Pessoal) em 21/10.", never "você não fez nada". |
 | "O que é TCP?" | No search. General knowledge does not depend on the user's memory. |
 
 ## Save on your own, with a notice

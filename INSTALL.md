@@ -11,7 +11,7 @@ This file is written for an AI assistant that a user asked to "install Brainside
 | Marketplace name | `brainside-ai` |
 | Plugin name | `brainside` (install id `brainside@brainside-ai`) |
 | Install guide on the Brainside site | https://www.brainside.ai/instalar |
-| Brainside server this plugin version needs | The release that adds `create_upload` and `get_upload`, or later. On a connection that can save, its tools include `answer_node_questions` and `create_upload` |
+| Brainside server this plugin version needs | The release of 2026-10-22 that opens a day's hub and pages `backlinks`, or later. On a connection that can save, its tools include `answer_node_questions` and `create_upload`, and on any connection its `backlinks` tool takes `offset` |
 | Upload host for files | `api.brainside.ai`. The upload link itself comes from the `create_upload` tool; the user allows this host in the client's network settings so the AI can send files (see each client below) |
 
 The GitHub organization named `brainside` (without `-ai`) is not Brainside. Never install from it.

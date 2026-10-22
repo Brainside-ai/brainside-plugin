@@ -1,7 +1,7 @@
 {
   "name": "brainside",
   "displayName": "Brainside",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Your Brainside memory inside your AI. Adds the Brainside skill (when to search, what to save on its own, when to ask first, what never to do) and the Brainside MCP connector (https://api.brainside.ai/mcp, OAuth login on brainside.ai).",
   "author": {
     "name": "Brainside",
