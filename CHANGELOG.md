@@ -6,13 +6,28 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.5.0** | The release that adds `open_upload_form` (the upload box in the chat), or later | As in 0.4.0, plus: where a command cannot reach Brainside, or there is no way to run one, it opens an upload box in the chat instead of asking you to allow a domain; if the box does not appear, it gives you the upload page |
 | **0.4.0** | The release of the agents v2 (agents waiting for confirmation, the agent catalog in `list_spaces`), or later | As in 0.3.1. Every read starts with a search, even with an App's slug in hand. The agents it creates for you wait for your confirmation on the Brainside screen; it says when it uses an agent, and copies one elsewhere only when you ask |
 | **0.3.1** | The release of 2026-10-22 that opens a day's hub (`episodio:YYYY-MM-DD`) and pages `backlinks`, or later | As in 0.3.0. For "what did I do on <date>?", opens that day and lists, page by page, what Brainside recorded in that space that day (notes, not App records or files) |
 | **0.3.0** | The release that adds `create_upload` and `get_upload`, or later | As in 0.2.0, plus files: sends them with a one-time upload link, or gives you a Brainside upload page |
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, and for 0.4.0 when its `upsert_node` tool also takes `apps`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, and for 0.5.0 when it also lists `open_upload_form`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.5.0 — 2026-10-23
+
+The upload box in the chat, for the Brainside server release that adds `open_upload_form`, or later.
+
+### What changes for you
+
+- **No domain to allow.** When the upload command is blocked (`403`) or your AI has no way to run commands (claude.ai with code execution off, the Claude mobile app), it opens an upload box in the chat. You pick the file and tap Send; the file goes straight from your device to Brainside, never through the AI.
+- **You confirm in the box.** The box shows a notice for sensitive files (exams, invoices, contracts, someone else's files); your tap on Send is the confirmation.
+- **If the box does not appear,** tell your AI: it gives you the upload page instead.
+
+### What the skill expects from the server
+
+`open_upload_form` in the tool list. Without it, the skill keeps using the upload page.
 
 ## 0.4.0 — 2026-10-22
 
