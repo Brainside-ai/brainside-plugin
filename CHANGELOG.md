@@ -6,7 +6,7 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
-| **0.5.2** | The release where the upload box tells the AI through its context, or later | As in 0.5.1, plus: after you save in the box, your AI checks on its own; nothing is typed into your message box |
+| **0.5.2** | The release where the upload box stops writing into the chat, or later | As in 0.5.1, plus: nothing is typed into your message box; when you continue the conversation, your AI checks on its own |
 | **0.5.1** | The release that adds `o_que` and `por_que` to `open_upload_form`, or later | As in 0.5.0, plus: your AI fills the box with what the file is and why keep it, says it offered the box (never that it is open) and gives you the link in the same reply |
 | **0.5.0** | The release that adds `open_upload_form` (the upload box in the chat), or later | As in 0.4.0, plus: where a command cannot reach Brainside, or there is no way to run one, it opens an upload box in the chat instead of asking you to allow a domain; if the box does not appear, it gives you the upload page |
 | **0.4.0** | The release of the agents v2 (agents waiting for confirmation, the agent catalog in `list_spaces`), or later | As in 0.3.1. Every read starts with a search, even with an App's slug in hand. The agents it creates for you wait for your confirmation on the Brainside screen; it says when it uses an agent, and copies one elsewhere only when you ask |
@@ -21,12 +21,12 @@ Your server is ready for 0.2.0 when your AI's Brainside connector, on a connecti
 
 ### What changes for you
 
-- **Nothing is typed into your message box.** Before, saving in the upload box put a line in your message box on claude.ai, with a warning about running that prompt. Now the box tells your AI through its context, and your message box stays empty.
-- **Your AI checks on its own.** On its next turn it confirms the upload with Brainside; it does not ask you whether it worked.
+- **Nothing is typed into your message box.** Before, saving in the upload box put a line in your message box on claude.ai, with a warning about running that prompt. Now the box only shows the result (saved or dismissed) and sends nothing to the chat.
+- **Your AI checks on its own.** When you continue the conversation, it confirms the upload with Brainside; it does not ask you whether it worked.
 
 ### What the skill expects from the server
 
-The upload box that uses `ui/update-model-context`. On an older server the skill still works: the AI checks with `get_upload` on its next turn.
+The upload box that no longer writes into the chat. On an older server the skill still works.
 
 ## 0.5.1 — 2026-10-23
 

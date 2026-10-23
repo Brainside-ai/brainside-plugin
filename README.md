@@ -175,7 +175,7 @@ If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. 
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
-| **0.5.2** | The release where the upload box tells the AI through its context (`ui/update-model-context`), or later | As in 0.5.1. After you save in the box, your AI checks on its own on its next turn; nothing is typed into your message box |
+| **0.5.2** | The release where the upload box stops writing into the chat, or later | As in 0.5.1. After you save in the box, nothing is typed into your message box; when you continue the conversation, your AI checks on its own |
 | **0.5.1** | The release that adds `o_que` and `por_que` to `open_upload_form`, or later | As in 0.5.0. Your AI says it offered the upload box (it cannot see it) and gives you the link at once; if the box does not appear, reload the app or reconnect the Brainside connector |
 | **0.5.0** | The release that adds `open_upload_form` (the upload box in the chat), or later | As in 0.4.0. Where a command cannot reach Brainside, or there is no way to run one, it opens an upload box in the chat instead of asking you to allow a domain; if the box does not appear, it gives you the upload page |
 | **0.4.0** | The release of the agents v2 (agents waiting for confirmation, the agent catalog in `list_spaces`), or later | As in 0.3.1. Every read starts with a search, even with an App's slug in hand; agents it creates wait for your confirmation on the Brainside screen, it says when it uses one, and copies one elsewhere only when you ask |
