@@ -28,9 +28,9 @@ Calls fail with an authentication error. Ask the user to authenticate again the 
 
 ## Sending a file
 
-`create_upload` returns a curl command that sends the file to `api.brainside.ai`. It works where you can run commands and the client's network lets that host through. Where it does not, on claude.ai and the Claude apps use `open_upload_form`: an upload box in the chat where the user picks the file and taps Send, with no domain to allow. If the box does not appear, or in an app without it (ChatGPT), give the user the upload page (`app_url`): they open it, log in to Brainside and pick the file; then check with `get_upload`.
+`create_upload` returns a curl command that sends the file to `api.brainside.ai`. It works where you can run commands and the client's network lets that host through. Where it does not, on claude.ai and the Claude apps use `open_upload_form`: an upload box in the chat where the user picks the file and taps Save, with no domain to allow. You cannot see the box: say you offered it, never that it is open, and give the `app_url` in the same reply. If the box does not appear, or in an app without it (ChatGPT), give the user the upload page (`app_url`): they open it, log in to Brainside and pick the file; then check with `get_upload`.
 
-The upload box is new (2026-10-23) and is being tested on claude.ai web, Desktop, iOS and Android. If the user says it did not appear, or the file picker in it did not open, use the upload page.
+The upload box is new (2026-10-23) and is being tested on claude.ai web, Desktop, iOS and Android. If the user says it did not appear: reload the app (Ctrl+R or Cmd+R on web and Desktop) or reconnect the Brainside connector, then ask again; in Brainside's test on 2026-10-23 the box only showed after one of the two. If it still does not appear, or the file picker in it did not open, use the upload page (`app_url`).
 
 What each client needs, as its maker's documentation said on 2026-10-22 ("reported" marks what only users or third parties say):
 
