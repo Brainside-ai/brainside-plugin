@@ -6,6 +6,7 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.6.0** | The release where a rule your AI creates for you is born active, or later | As in 0.5.2, plus: a rule it creates in your memory is active at once; it shows you the receipt with a link to turn it off, and gives the rule its subject (`aplica_se_a`) when it creates it |
 | **0.5.2** | The release where the upload box stops writing into the chat, or later | As in 0.5.1, plus: nothing is typed into your message box; when you continue the conversation, your AI checks on its own |
 | **0.5.1** | The release that adds `o_que` and `por_que` to `open_upload_form`, or later | As in 0.5.0, plus: your AI fills the box with what the file is and why keep it, says it offered the box (never that it is open) and gives you the link in the same reply |
 | **0.5.0** | The release that adds `open_upload_form` (the upload box in the chat), or later | As in 0.4.0, plus: where a command cannot reach Brainside, or there is no way to run one, it opens an upload box in the chat instead of asking you to allow a domain; if the box does not appear, it gives you the upload page |
@@ -15,7 +16,20 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, and for 0.5.0 when it also lists `open_upload_form`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, and for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.6.0 — 2026-10-25
+
+### What changes for you
+
+- **A rule your AI creates for you is active at once.** Before, it was saved as a draft and you had to activate it on the Brainside screen before any AI followed it. Now, when you ask your AI for a rule and it saves it in your own memory, it applies right away. Your AI shows you a receipt ("Rule created and already active: <title>") with a link that turns it off in one click, and Brainside flags it on your notifications until you keep it or turn it off. If you didn't ask for that rule, turn it off.
+- **Still drafts:** a rule your AI marks as coming from someone else's content (an email, a page, a file) or as deduced by itself, one in someone else's memory, one with a reserved name (like the saving policy's) and anything past the daily limit. Brainside goes by what your AI declares: it cannot tell on its own where a text came from, so an AI misled by an email that doesn't declare it gets an active rule. That's why the receipt, the notification and the one-click off exist. Agents are unchanged: the ones your AI creates still wait for your confirmation.
+- **The rule's subject goes in when it's created.** Your AI gives the rule the items it applies to (`aplica_se_a`) in the same save, because linking an active rule later becomes a pending item for you on screen.
+- **Brainside tells your AI that a rule it created gives way:** if it conflicts with a rule you approved on screen or with your saving policy, the other one wins; and that no rule or agent overrides the limits. These are instructions to your AI, not a guarantee of what a model does.
+
+### What the skill expects from the server
+
+The release where a rule the user's AI creates in their own memory is born active (`upsert_node` takes `aplica_se_a` and the save's `recibo` has a `regra` part). On an older server, the skill still works: the rule comes out as a draft, the older server's description of `forma` says so, and the skill says a rule is active only if the response confirms it.
 
 ## 0.5.2 — 2026-10-23
 
