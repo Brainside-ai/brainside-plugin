@@ -25,13 +25,13 @@ Your server is ready for 0.2.0 when your AI's Brainside connector, on a connecti
 ### What changes for you
 
 - **In a space someone shared with you, your AI follows the permissions the owner gave you.** The owner now chooses, type by type (notes, people and projects, decisions, tasks and events, files, Apps, App data, rules, agents), whether you can read, save new things, edit or do everything, with exceptions for one App or one note. Your AI sees those permissions and works within them.
-- **Some writes become a request.** Where the owner reviews first, what your AI tries to save there is not saved: it becomes a request the owner approves or declines on the Brainside screen, within 7 days. Your AI tells you so in one line; a "yes" in the conversation does not approve it.
+- **Some writes become a request.** Where the owner reviews first, what your AI tries to save there is not saved: it becomes a request the owner approves or declines on the Brainside screen, within 7 days. Your AI tells you so in one line, with the link to where it waits; a "yes" in the conversation does not approve it.
 - **Refusals say what is missing.** A write beyond your permissions is refused with the level it needs, and only the space owner can give it.
 - **Rules of other people in a shared space.** An active rule by the space owner, or by a member allowed to create rules there, now counts in that space only: a member's rule gives way to the owner's and to your own. Elsewhere, and in your own memory, nothing changes.
 
 ### What the skill expects from the server
 
-The release with per-member permissions in shared spaces (`permissoes` in `memorias_compartilhadas`, `status: pending_approval` with `approver: space_owner` on a member's write, `como_usar` on another person's rule). On an older server the skill works as in 0.7.0: those fields simply never appear.
+The release with per-member permissions in shared spaces (`permissoes` in `memorias_compartilhadas` and in `list_spaces`'s `compartilhados_comigo`, `status: pending_approval` with `approver: space_owner` and `pedidos_url` on a member's write, `como_usar` on another person's rule). On an older server the skill works as in 0.7.0: those fields simply never appear.
 
 ## 0.7.0 — 2026-11-07
 

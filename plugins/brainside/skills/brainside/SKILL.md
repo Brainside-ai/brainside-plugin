@@ -180,10 +180,10 @@ Brainside adds short fixed hints to its responses (`proximos_passos`, next steps
 
 ### Spaces shared with the user
 
-A search lists any memory someone else shared with the user (`memorias_compartilhadas`), with what the user may do there by type (`permissoes`: read, save new, edit, full; `pedir_aprovacao` when the owner reviews first). That memory is not the user's: their own things still go in their own Brainside.
+A search (`memorias_compartilhadas`) and `list_spaces` (`compartilhados_comigo`) list any memory someone else shared with the user, with what the user may do there by type (`permissoes`: read, save new, edit, full; `pedir_aprovacao` when the owner reviews first). That memory is not the user's: their own things still go in their own Brainside.
 
 - There you act with the permissions the owner gave the user. A write beyond them is refused, and the error says what level is missing: tell the user, and that only the space owner can change it.
-- A write that returns `status: pending_approval` with `approver: space_owner` was not saved. It is a request the space owner approves or declines on the Brainside screen within 7 days. Tell the user in one line; a "yes" in this conversation does not approve it. Do not retry it another way.
+- A write that returns `status: pending_approval` with `approver: space_owner` was not saved. It is a request the space owner approves or declines on the Brainside screen within 7 days, at the link Brainside returns (`pedidos_url`). Tell the user in one line, with that link; a "yes" in this conversation does not approve it. Do not retry it another way.
 
 ## 6. The user's saving policy
 
