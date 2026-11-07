@@ -6,6 +6,7 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.8.0** | The release with per-member permissions in shared spaces (`permissoes` in a search's `memorias_compartilhadas`), or later | As in 0.7.0, plus: in a space someone shared with you, it follows the permissions the owner gave you, tells you when a write was refused or became a request the owner approves on screen, and follows another person's active rule there only for that space |
 | **0.7.0** | The release where what you ask for in your own memory and Apps applies at once, with an undo link (the server lists `update_app_manual`), or later | As in 0.6.0, plus: when you ask, it changes a rule or agent it created, deletes it, creates an App or a field, or rewrites a manual right away, and shows you the undo link; a manual it writes stays data until you keep it |
 | **0.6.0** | The release where a rule your AI creates for you is born active, or later | As in 0.5.2, plus: a rule it creates in your memory is active at once; it shows you the receipt with a link to turn it off, and gives the rule its subject (`aplica_se_a`) when it creates it |
 | **0.5.2** | The release where the upload box stops writing into the chat, or later | As in 0.5.1, plus: nothing is typed into your message box; when you continue the conversation, your AI checks on its own |
@@ -17,7 +18,20 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, and for 0.7.0 when it also lists `update_app_manual`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, and for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.8.0 — 2026-11-07
+
+### What changes for you
+
+- **In a space someone shared with you, your AI follows the permissions the owner gave you.** The owner now chooses, type by type (notes, people and projects, decisions, tasks and events, files, Apps, App data, rules, agents), whether you can read, save new things, edit or do everything, with exceptions for one App or one note. Your AI sees those permissions and works within them.
+- **Some writes become a request.** Where the owner reviews first, what your AI tries to save there is not saved: it becomes a request the owner approves or declines on the Brainside screen, within 7 days. Your AI tells you so in one line, with the link to where it waits; a "yes" in the conversation does not approve it.
+- **Refusals say what is missing.** A write beyond your permissions is refused with the level it needs, and only the space owner can give it.
+- **Rules of other people in a shared space.** An active rule by the space owner, or by a member allowed to create rules there, now counts in that space only: a member's rule gives way to the owner's and to your own. Elsewhere, and in your own memory, nothing changes.
+
+### What the skill expects from the server
+
+The release with per-member permissions in shared spaces (`permissoes` in `memorias_compartilhadas` and in `list_spaces`'s `compartilhados_comigo`, `status: pending_approval` with `approver: space_owner` and `pedidos_url` on a member's write, `como_usar` on another person's rule). On an older server the skill works as in 0.7.0: those fields simply never appear.
 
 ## 0.7.0 — 2026-11-07
 
