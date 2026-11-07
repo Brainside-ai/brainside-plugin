@@ -6,6 +6,7 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.7.0** | The release where what you ask for in your own memory and Apps applies at once, with an undo link (the server lists `update_app_manual`), or later | As in 0.6.0, plus: when you ask, it changes a rule or agent it created, deletes it, creates an App or a field, or rewrites a manual right away, and shows you the undo link; a manual it writes stays data until you keep it |
 | **0.6.0** | The release where a rule your AI creates for you is born active, or later | As in 0.5.2, plus: a rule it creates in your memory is active at once; it shows you the receipt with a link to turn it off, and gives the rule its subject (`aplica_se_a`) when it creates it |
 | **0.5.2** | The release where the upload box stops writing into the chat, or later | As in 0.5.1, plus: nothing is typed into your message box; when you continue the conversation, your AI checks on its own |
 | **0.5.1** | The release that adds `o_que` and `por_que` to `open_upload_form`, or later | As in 0.5.0, plus: your AI fills the box with what the file is and why keep it, says it offered the box (never that it is open) and gives you the link in the same reply |
@@ -16,7 +17,26 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, and for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, and for 0.7.0 when it also lists `update_app_manual`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.7.0 — 2026-11-07
+
+### What changes for you
+
+- **What you ask for in your own memory and Apps can happen right away, and it can be undone.** Before, changing a rule or agent your AI had created, creating an App or a field, or changing a manual became a proposal you approved on the Brainside screen. Now, when you ask for it, Brainside can apply it at once. Every such change comes with an undo link to the new "Feito pela sua IA" page in Brainside (what your AI did). Undoing takes one click. Redoing asks you to confirm it's you.
+- **Your AI still asks first.** Setup (rules, agents, manuals, Apps, fields) is still only on your request, and your AI confirms with you before changing or deleting anything. What changed is what happens after your yes.
+- **What still waits for you on screen:**
+  - what you wrote or activated on the Brainside screen, and your saving policy (changing them stays a proposal, deleting them a pending item);
+  - anything your AI marks as coming from someone else's content or as its own deduction;
+  - anything in someone else's space;
+  - anything past a daily limit, or when many of your AI's changes are still unreviewed.
+- **A manual your AI writes is information until you keep it.** The App screen shows it waiting for you to keep it; until then, your AI follows the App's fields and what you say.
+- **Nothing is overwritten by a save.** In your own memory, when your AI saves something that would change an existing note, Brainside now saves nothing and tells your AI which note it is, so it can ask you and change it with `update_node`. It no longer creates a separate "possible version" in your own memory.
+- **Brainside notifies you** of the setup, App and manual changes your AI made (and of a note it rewrote that another connection had saved), until you open the "Feito pela sua IA" page.
+
+### What the skill expects from the server
+
+The release where the owner's own requests apply at once with an undo link (`update_app_manual` listed; `desfazer_url` in the responses). The skill says what state something is in only as the response says it, so on an older server (or one where this is not yet enabled for your account) everything still comes back as a proposal and works as in 0.6.0.
 
 ## 0.6.0 — 2026-10-25
 

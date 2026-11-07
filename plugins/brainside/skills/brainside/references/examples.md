@@ -65,4 +65,4 @@ In these examples the user is in their personal space ("Pessoal") and the connec
 | The user says (Portuguese example) | What you do |
 |---|---|
 | "Tenho um monte de receita espalhada por aí." | Do not install a template, create an App or suggest one on your own. Help with what they asked. If they ask how to organize the recipes, you may say an App is one option, and create it only if they ask for it. |
-| "Cria um App de receitas pra mim." | The user asked. Show matching templates; if one fits and they choose it, install it and say the App exists now. Otherwise propose a new App, and tell the user it exists only after they approve it at the review link. |
+| "Cria um App de receitas pra mim." | The user asked. Show matching templates; if one fits and they choose it, install it and say the App exists now. Otherwise call `propose_new_app`: if the response says `created`, tell the user the App exists now and give the undo link (`desfazer_url`); if it says `pending_approval`, tell them it exists only after they approve it at the review link. |
