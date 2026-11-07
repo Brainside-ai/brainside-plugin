@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="CHANGELOG.md"><img alt="Version 0.7.0" src="https://img.shields.io/badge/version-0.7.0-52514e"></a>
+  <a href="CHANGELOG.md"><img alt="Version 0.8.0" src="https://img.shields.io/badge/version-0.8.0-52514e"></a>
   <a href="#before-you-start"><img alt="Status: closed beta" src="https://img.shields.io/badge/status-closed_beta-52514e"></a>
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-52514e"></a>
 </p>
@@ -177,6 +177,7 @@ If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. 
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.8.0** | The release with per-member permissions in shared spaces (`permissoes` in a search's `memorias_compartilhadas`), or later | As in 0.7.0. In a space someone shared with you, it follows the permissions the owner gave you and tells you when a write became a request the owner approves on screen |
 | **0.7.0** | The release where what you ask for in your own memory and Apps applies at once, with an undo link (the server lists `update_app_manual`), or later | As in 0.6.0. When you ask, changes to a rule or agent it created, a new App, a field or a manual can apply at once, with an undo link; a manual it writes stays information until you keep it |
 | **0.6.0** | The release where a rule your AI creates for you is born active, or later | As in 0.5.2. A rule it creates in your memory is active at once: it shows you the receipt with a link to turn it off, and it gives the rule its subject when it creates it |
 | **0.5.2** | The release where the upload box stops writing into the chat, or later | As in 0.5.1. After you save in the box, nothing is typed into your message box; when you continue the conversation, your AI checks on its own |
@@ -188,7 +189,7 @@ If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. 
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-How to tell your server is ready: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` for 0.2.0, and also `create_upload` for 0.3.0 (in Claude Code, `/mcp`); for 0.3.1, its `backlinks` tool also takes `offset`; for 0.4.0, its `upsert_node` tool also takes `apps`; for 0.5.0, it also lists `open_upload_form`; for 0.7.0, it also lists `update_app_manual`. With 0.3.0 on a server without `create_upload`, your AI sends only small files and tells you larger ones must wait. With 0.3.1 on a server whose `backlinks` takes no `offset`, your AI still opens the day you ask about and tells you the list may be incomplete. Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
+How to tell your server is ready: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` for 0.2.0, and also `create_upload` for 0.3.0 (in Claude Code, `/mcp`); for 0.3.1, its `backlinks` tool also takes `offset`; for 0.4.0, its `upsert_node` tool also takes `apps`; for 0.5.0, it also lists `open_upload_form`; for 0.7.0, it also lists `update_app_manual`; for 0.8.0, a search that lists `memorias_compartilhadas` also gives their `permissoes`. With 0.3.0 on a server without `create_upload`, your AI sends only small files and tells you larger ones must wait. With 0.3.1 on a server whose `backlinks` takes no `offset`, your AI still opens the day you ask about and tells you the list may be incomplete. Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
 
 Why 0.2.0 needs that release: on it, saving only creates or adds, and never overwrites. Changing an item takes a separate step that checks your AI read the latest version. On older servers, saving an item that already exists replaced its whole note, which is why 0.1.1 asks before every save.
 
