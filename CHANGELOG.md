@@ -6,6 +6,7 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.9.0** | The release where the permissions decide what applies at once, with quarantine and who did it (the server's `update_app_manual` answers with `written_by_your_ai`), or later | As in 0.8.1, plus: what you ask for applies at once when the permissions allow, rules, agents and manuals included, and it is in force for every AI in that space; it reads who wrote each rule, manual and agent, and the space owner's come first; a write held for review (`em_quarentena`) is not saved, and it tells you instead of retrying |
 | **0.8.1** | The release where every tool takes `espaco` (the server lists it in each tool's arguments), or later | As in 0.8.0, plus: to act in another of your spaces, or in one shared with you, your AI says which space in the call, and asks you when it is not clear which one you mean |
 | **0.8.0** | The release with per-member permissions in shared spaces (`permissoes` in a search's `memorias_compartilhadas`), or later | As in 0.7.0, plus: in a space someone shared with you, it follows the permissions the owner gave you, tells you when a write was refused or became a request the owner approves on screen, and follows another person's active rule there only for that space |
 | **0.7.0** | The release where what you ask for in your own memory and Apps applies at once, with an undo link (the server lists `update_app_manual`), or later | As in 0.6.0, plus: when you ask, it changes a rule or agent it created, deletes it, creates an App or a field, or rewrites a manual right away, and shows you the undo link; a manual it writes stays data until you keep it |
@@ -19,7 +20,16 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`, and for 0.8.1 when its tools also take `espaco`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`, for 0.8.1 when its tools also take `espaco`, and for 0.9.0 when the `update_app_manual` tool's description says a manual is in force at once. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.9.0 — 2026-11-08
+
+### What changes for you
+
+- **The permissions decide what applies at once; quarantine; who did it.** When you ask, a rule, an agent or an App manual your AI writes is in force at once, for every AI that reads that space, with an undo link; this also holds for what you wrote or activated on the Brainside screen, and for the saving policy. Only what comes from external content, or what the space owner set to require approval, waits for approval on the screen.
+- Your AI reads who wrote each rule, manual and agent (`written_by_your_ai`, `written_by_owner`, `written_by_member`; `sua_ia`, `dono`, `membro`), and when two conflict, the space owner's comes first, then yours, then another member's. Another person's applies only in that space.
+- A write that Brainside holds for review (`em_quarentena`) is not saved: your AI tells you in one line and does not retry or reword it. You release or delete it on the Brainside screen.
+- Every change records who made it, and you see your AI's changes in Activity, with the undo link.
 
 ## 0.8.1 — 2026-11-08
 
