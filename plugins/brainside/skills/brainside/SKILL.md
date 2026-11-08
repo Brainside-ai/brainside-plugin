@@ -60,6 +60,7 @@ How:
 
 - Search with the names and key terms of the request; send a few variants of the same question (synonyms, other names). One or two searches are usually enough. Open an item when its summary is not enough.
 - Every read starts with a search, even when you already know an App's slug (from `list_spaces` or an earlier turn): opening the App directly misses the agents, rules and notes around it.
+- Every tool takes an optional `espaco`: the id or name of one of the user's spaces, or of a space shared with them (from `list_spaces`). Without it, the call acts in the default space. If it is unclear which space the user means, ask. To look across several spaces, call once per space and combine the results yourself. An `espaco` Brainside does not know, or a target (an App or a memory) that belongs to another space, is an error: tell the user, or ask which space they meant; do not retry elsewhere.
 - Once per conversation, read the user's general rules: `list_nodes({forma: "regra", vigencia: "vigente"})`, then `get_node` on the ones that matter.
 - Besides the items, a search brings the user's rules that apply to what it found, relevant agents, matching Apps, and any memory that someone else shared with the user (that one is theirs, not the user's).
 - Use what you find and say briefly where it came from ("per your Brainside note on the supplier…").
@@ -180,7 +181,7 @@ Brainside adds short fixed hints to its responses (`proximos_passos`, next steps
 
 ### Spaces shared with the user
 
-A search (`memorias_compartilhadas`) and `list_spaces` (`compartilhados_comigo`) list any memory someone else shared with the user, with what the user may do there by type (`permissoes`: read, save new, edit, full; `pedir_aprovacao` when the owner reviews first). That memory is not the user's: their own things still go in their own Brainside.
+A search (`memorias_compartilhadas`) and `list_spaces` (`compartilhados_comigo`) list any memory someone else shared with the user, with what the user may do there by type (`permissoes`: read, save new, edit, full; `pedir_aprovacao` when the owner reviews first). That memory is not the user's: their own things still go in their own Brainside. To act there, pass `espaco` with that space's id (`espaco_id`) or name.
 
 - There you act with the permissions the owner gave the user. A write beyond them is refused, and the error says what level is missing: tell the user, and that only the space owner can change it.
 - A write that returns `status: pending_approval` with `approver: space_owner` was not saved. It is a request the space owner approves or declines on the Brainside screen within 7 days, at the link Brainside returns (`pedidos_url`). Tell the user in one line, with that link; a "yes" in this conversation does not approve it. Do not retry it another way.
