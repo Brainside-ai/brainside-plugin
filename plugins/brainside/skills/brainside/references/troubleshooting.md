@@ -72,6 +72,7 @@ This version of the plugin needs the Brainside server release of 2026-10-22 that
 - No `answer_node_questions` (a server from before the second release of 2026-10-21): ask before every save, read an item before changing it and send it back complete, and tell the user once that the Brainside server is older than this plugin expects.
 - `answer_node_questions` but no `create_upload`: saving works as usual. Send only very small files (a few tens of KB), with `upload_attachment` and their size and SHA-256 measured by a command, and tell the user once that other files must wait for a Brainside update.
 - `backlinks` without `offset`: a day's hub may list only part of that day's record. For "what did I do on <date>?", still open the day, and tell the user the list may be incomplete.
+- No `show_view`: the server has no views yet. Show App data in text, or in an artifact when the user asks for one.
 
 ## A Brainside connector added by hand
 
@@ -88,6 +89,15 @@ Brainside refuses a whole save when its text holds a password, token, API key or
 ## Confirmations from the client
 
 Some clients ask the user to confirm each write (ChatGPT does this for tools that change data). That is the client's own safety prompt. Do not try to avoid it.
+
+## A view does not appear
+
+You cannot see the card that `show_view` draws, so you learn this from the user.
+
+- Claude Code, and any client that does not show cards, never draws one: present the summary in the result in markdown.
+- Elsewhere, if the user says no card appeared, present the same summary in markdown. Reloading the app or reconnecting the Brainside connector may bring the cards back; do not call `show_view` in a loop.
+- If the result says the time zone was not given and Brasilia time was used, the day may be off for the user: pass `fuso` (and `hoje` when you know it) in the next `show_view`.
+- A source or block shown as without access, outdated or failed is not an error of yours to retry: say what is missing. If the user wants it fixed and the view is theirs, change it with `update_view`.
 
 ## Updates
 
