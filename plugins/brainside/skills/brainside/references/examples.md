@@ -66,3 +66,18 @@ In these examples the user is in their personal space ("Pessoal") and the connec
 |---|---|
 | "Tenho um monte de receita espalhada por aí." | Do not install a template, create an App or suggest one on your own. Help with what they asked. If they ask how to organize the recipes, you may say an App is one option, and create it only if they ask for it. |
 | "Cria um App de receitas pra mim." | The user asked. Show matching templates; if one fits and they choose it, install it and say the App exists now. Otherwise call `propose_new_app`: if the response says `created`, tell the user the App exists now and give the undo link (`desfazer_url`); if it says `pending_approval`, tell them it exists only after they approve it at the review link. |
+
+## Views
+
+In these examples the user keeps a Tasks App ("tarefas"), has a view of their day ("meu-dia") that declares the agenda as `entradas`, has a calendar connector, and is in Brasilia time.
+
+| The user says (Portuguese example) | What you do |
+|---|---|
+| "Me mostra meu dia." | `show_view({visao: "meu-dia", periodo: "hoje", fuso: "America/Sao_Paulo", entradas: {...}})`, with today's events read from the calendar connector just now. Then a line or two on what matters ("Três tarefas vencem hoje; a tarde está livre depois das 15h."), never the table again. No artifact. |
+| "E a semana?" | `show_view` again with `periodo: "semana"` and the week's events in `entradas`. |
+| "Me mostra o dia 14." (asked in November) | `periodo: {data: "2026-11-14"}`, with that day's events. |
+| "Terminei o relatório da Lumen." (the day's view is on screen) | Mark the task done in the Tasks App with `update_record`, say it in one line, then call `show_view` again with only the block that shows that task. The card already on screen does not change by itself. |
+| "Tem algum horário livre amanhã pra revisar o contrato?" | Find the free slots yourself, from the calendar connector, and answer in the conversation. The view calculates nothing; to show your suggestions in the card, pass them as `entradas` only if the view declares them. |
+| "Quero ver minhas despesas do mês num gráfico." (no view fits) | Offer once: "Posso salvar isso como uma visão no seu Brainside e mostrar aqui sempre que você pedir. Quer?" After a yes: read the expenses App's manual with `get_node({app})`, then `create_view`. If it answers `needs_guide`, read the guide, follow it and send the same call again with its `guia_hash`. |
+| "Faz uma apresentação com os números do trimestre pra reunião de sexta." | A presentation: make an artifact, not a view. |
+| "Me mostra a semana." (in Claude Code) | Claude Code shows no card. Call `show_view` the same way and present the summary in its result to the user in markdown. |

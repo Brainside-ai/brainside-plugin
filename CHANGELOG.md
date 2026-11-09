@@ -6,6 +6,7 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.10.0** | The release with views in the chat (the server lists `show_view`), or later | As in 0.9.0, plus: to show your App data (your day, your week), it shows a saved view drawn in the chat, voice mode included, instead of making an artifact, and shows it again after a change; it creates or changes a view only when you ask; in Claude Code, the same data comes as text |
 | **0.9.0** | The release where the permissions decide what applies at once, with quarantine and who did it (the server's `update_app_manual` answers with `written_by_your_ai`), or later | As in 0.8.1, plus: what you ask for applies at once when the permissions allow, rules, agents and manuals included, and it is in force for every AI in that space; it reads who wrote each rule, manual and agent, and the space owner's come first; a write held for review (`em_quarentena`) is not saved, and it tells you instead of retrying |
 | **0.8.1** | The release where every tool takes `espaco` (the server lists it in each tool's arguments), or later | As in 0.8.0, plus: to act in another of your spaces, or in one shared with you, your AI says which space in the call, and asks you when it is not clear which one you mean |
 | **0.8.0** | The release with per-member permissions in shared spaces (`permissoes` in a search's `memorias_compartilhadas`), or later | As in 0.7.0, plus: in a space someone shared with you, it follows the permissions the owner gave you, tells you when a write was refused or became a request the owner approves on screen, and follows another person's active rule there only for that space |
@@ -20,7 +21,22 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`, for 0.8.1 when its tools also take `espaco`, and for 0.9.0 when the `update_app_manual` tool's description says a manual is in force at once. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`, for 0.8.1 when its tools also take `espaco`, for 0.9.0 when the `update_app_manual` tool's description says a manual is in force at once, and for 0.10.0 when it also lists `show_view`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.10.0 — 2026-11-09
+
+### What changes for you
+
+- **Your App data as a view in the chat.** When you ask to see your day, your week or an App's data, your AI shows a saved view: a card Brainside draws in the conversation with the current data of your Apps, in the clients that show cards (claude.ai and the Claude apps, voice mode included). It no longer makes an artifact for that; an artifact is for when you ask for one, or for a presentation, a document or something complex.
+- **You choose the slice by asking.** "Show me the week", "today" or a date: your AI picks the period, and sends your time zone so the day is yours. Without it, Brainside uses Brasilia time and says so.
+- **Your agenda comes along.** If the view declares it, your AI reads your calendar connector each time and passes the events to the view; they are never saved in Brainside. Free slots and time suggestions are worked out by your AI in the conversation, not by the view.
+- **To refresh, ask.** A view has no buttons: you tell your AI what changed ("I finished the report"), it records it in your App and shows the view again, usually only the part that changed. A card already on screen does not change by itself.
+- **Views are created or changed only when you ask.** Your AI reads the manuals of the Apps involved and Brainside's views guide first. If you want to see App data and no view fits, it offers one in a line.
+- **Claude Code and clients without cards** get the same data as text, which your AI presents in markdown.
+
+### What the skill expects from the server
+
+The release with views in the chat (`show_view`, `create_view`, `update_view`, `needs_guide` with the views guide, and `list_nodes({forma: "visao"})`). On an older server the skill works as in 0.9.0: with no `show_view`, your AI shows App data in text, or in an artifact when you ask for one.
 
 ## 0.9.0 — 2026-11-08
 
