@@ -6,6 +6,7 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.11.0** | The release with the view's page (`show_view` returns `link`; `list_spaces` lists `visoes`), or later | As in 0.10.0, plus: every view has a page in Brainside; in Claude Code, Codex and the terminal your AI gives you that link in one line, and in claude.ai only when you say you do not see the card; on the page you change the period and refresh by yourself; for "how is my day?" it finds the view that fits on its own |
 | **0.10.0** | The release with views in the chat (the server lists `show_view`), or later | As in 0.9.0, plus: to show your App data (your day, your week), it shows a saved view drawn in the chat, voice mode included, instead of making an artifact, and shows it again after a change; it creates or changes a view only when you ask; in Claude Code, the same data comes as text |
 | **0.9.0** | The release where the permissions decide what applies at once, with quarantine and who did it (the server's `update_app_manual` answers with `written_by_your_ai`), or later | As in 0.8.1, plus: what you ask for applies at once when the permissions allow, rules, agents and manuals included, and it is in force for every AI in that space; it reads who wrote each rule, manual and agent, and the space owner's come first; a write held for review (`em_quarentena`) is not saved, and it tells you instead of retrying |
 | **0.8.1** | The release where every tool takes `espaco` (the server lists it in each tool's arguments), or later | As in 0.8.0, plus: to act in another of your spaces, or in one shared with you, your AI says which space in the call, and asks you when it is not clear which one you mean |
@@ -21,7 +22,20 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`, for 0.8.1 when its tools also take `espaco`, for 0.9.0 when the `update_app_manual` tool's description says a manual is in force at once, and for 0.10.0 when it also lists `show_view`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`, for 0.8.1 when its tools also take `espaco`, for 0.9.0 when the `update_app_manual` tool's description says a manual is in force at once, for 0.10.0 when it also lists `show_view`, and for 0.11.0 when `show_view` returns `link`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.11.0 — 2026-11-11
+
+### What changes for you
+
+- **Every view has a page in Brainside.** `show_view`, `create_view` and `update_view` now return `link`, the view's page. It asks you to log in and shows only what you can see; it is not a public link, and your AI never sends it to someone else.
+- **Where cards do not appear** (Claude Code, Codex, the terminal), your AI gives you the link in one line and summarizes the data in text. In claude.ai and the Claude apps, it mentions the link only when you say you do not see the card or ask to open it in Brainside.
+- **On the page, you navigate.** Change the period (today, yesterday, tomorrow, this week, next week, this month, a day) and refresh by yourself. Nothing is written. The agenda from your calendar shows only in the chat, where your AI reads it.
+- **"How is my day?" finds the view.** In a new conversation, your AI checks your views (the `visoes` catalog in `list_spaces`) and shows the one that fits, without you naming it. If none fits, it answers in text and offers to create one.
+
+### What the skill expects from the server
+
+The release with the view's page (`link` in `show_view`, `visoes` in `list_spaces`). On an older server the skill works as in 0.10.0.
 
 ## 0.10.0 — 2026-11-09
 
