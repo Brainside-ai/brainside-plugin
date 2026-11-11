@@ -73,6 +73,7 @@ This version of the plugin needs the Brainside server release of 2026-10-22 that
 - `answer_node_questions` but no `create_upload`: saving works as usual. Send only very small files (a few tens of KB), with `upload_attachment` and their size and SHA-256 measured by a command, and tell the user once that other files must wait for a Brainside update.
 - `backlinks` without `offset`: a day's hub may list only part of that day's record. For "what did I do on <date>?", still open the day, and tell the user the list may be incomplete.
 - No `show_view`: the server has no views yet. Show App data in text, or in an artifact when the user asks for one.
+- `show_view` without `link` in its result: the server is older than 0.11.0 of this plugin. Show the view as before; in clients without cards, present App data in text.
 
 ## A Brainside connector added by hand
 
@@ -95,7 +96,8 @@ Some clients ask the user to confirm each write (ChatGPT does this for tools tha
 You cannot see the card that `show_view` draws, so you learn this from the user.
 
 - Claude Code, and any client that does not show cards, never draws one: present the summary in the result in markdown.
-- Elsewhere, if the user says no card appeared, present the same summary in markdown. Reloading the app or reconnecting the Brainside connector may bring the cards back; do not call `show_view` in a loop.
+- Elsewhere, if the user says no card appeared, give the `link` from the result in one line and present the same summary in markdown. Reloading the app or reconnecting the Brainside connector may bring the cards back; do not call `show_view` in a loop.
+- The `link` opens the view's page in Brainside: it asks for login and shows only what the user can see. If the page says the view does not exist, the user is logged in to another account, or lost access to that space. On the page, the agenda (`entradas`) does not appear: it comes only when you show the view in the chat.
 - If the result says the time zone was not given and Brasilia time was used, the day may be off for the user: pass `fuso` (and `hoje` when you know it) in the next `show_view`.
 - A source or block shown as without access, outdated or failed is not an error of yours to retry: say what is missing. If the user wants it fixed and the view is theirs, change it with `update_view`.
 
