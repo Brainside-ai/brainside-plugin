@@ -101,6 +101,8 @@ You cannot see the card that `show_view` draws, so you learn this from the user.
 - The `link` opens the view's page in Brainside: it asks for login and shows only what the user can see. If the page says the view does not exist, the user is logged in to another account, or lost access to that space. On the page, the agenda (`entradas`) does not appear: it comes only when you show the view in the chat.
 - If the result says the time zone was not given and Brasilia time was used, the day may be off for the user: pass `fuso` (and `hoje` when you know it) in the next `show_view`.
 - A source or block shown as without access, outdated or failed is not an error of yours to retry: say what is missing. If the user wants it fixed and the view is theirs, change it with `update_view`.
+- The card says a block "falhou ao desenhar" (failed to draw), with the error type: on a view you wrote, the view's `get_node` brings the same in `visao.ultimo_desenho` (`bloco`, `tipo`). Fix that block with `update_view`. Fragments (`<>…</>`) are not the cause: they work.
+- `visao.ultimo_desenho` missing from the view's `get_node`: the server is older than 0.12.2 of this plugin, or the view is not yours. Ask the user what the card shows.
 - `create_view` or `update_view` not in your tools, while `show_view` is: in Claude Code only `show_view` is always loaded. Search for the tool by name before telling the user it is missing.
 
 ## Updates
