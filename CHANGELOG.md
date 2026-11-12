@@ -6,6 +6,7 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.12.2** | The release where the view's `get_node` brings `ultimo_desenho` (the `create_view` description names it), or later | As in 0.12.1, plus: after it creates or changes a view, where the app draws it, your AI checks that it drew and, if a block failed, fixes that block; it no longer rewrites views to avoid fragments (`<>…</>`), which work |
 | **0.12.1** | The release where `list_spaces`, `search_nodes` and `list_nodes` bring `plugin.versao_atual` (the `search_nodes` description names it), or later | As in 0.12.0, plus: when there is a newer version of the plugin, your AI tells you once per conversation, in one line, and goes on with what you asked |
 | **0.12.0** | The release where `show_view`'s description says to always give the link, or later | As in 0.11.0, plus: every time it shows a view, in any app, it gives you the link in one line; for your day, week, tasks, agenda, bills or goals it checks your views and Apps first, without you asking; with no view that fits, it answers from your Apps and offers to create one |
 | **0.11.0** | The release with the view's page (`show_view` returns `link`; `list_spaces` lists `visoes`), or later | As in 0.10.0, plus: every view has a page in Brainside; in Claude Code, Codex and the terminal your AI gives you that link in one line, and in claude.ai only when you say you do not see the card; on the page you change the period and refresh by yourself; for "how is my day?" it finds the view that fits on its own |
@@ -24,7 +25,19 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`, for 0.8.1 when its tools also take `espaco`, for 0.9.0 when the `update_app_manual` tool's description says a manual is in force at once, for 0.10.0 when it also lists `show_view`, for 0.11.0 when `show_view` returns `link`, for 0.12.0 when `show_view`'s description says to always give the link, and for 0.12.1 when the `search_nodes` tool's description names `plugin.versao_atual`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`, for 0.8.1 when its tools also take `espaco`, for 0.9.0 when the `update_app_manual` tool's description says a manual is in force at once, for 0.10.0 when it also lists `show_view`, for 0.11.0 when `show_view` returns `link`, for 0.12.0 when `show_view`'s description says to always give the link, for 0.12.1 when the `search_nodes` tool's description names `plugin.versao_atual`, and for 0.12.2 when the `create_view` tool's description names `ultimo_desenho`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.12.2 — 2026-11-12
+
+### What changes for you
+
+- **Your AI checks that the view it wrote actually drew.** After it creates or changes a view, in an app that draws cards, Brainside records how that version drew for you: fine, or which block failed and the type of error. Your AI reads that (`ultimo_desenho` in the view's `get_node`) and, if a block failed, fixes that block and tells you in one line. Where the app does not draw cards (Claude Code, for example) there is nothing to check: it gives you the link, as before, and does not keep asking.
+- **No more rewriting views to avoid fragments.** A suspicion from 09/11 was that React fragments (`<>…</>`) broke a view in the chat. Brainside measured it on 12/11 and they do not: views with fragments drew normally, in the chat and on the view's page. The skill now says fragments work.
+- **"Saved, not shown."** When a view is saved but does not come back to be drawn, the card says so, and your AI shows it again instead of saving it twice.
+
+### What the skill expects from the server
+
+The release where the view's `get_node` brings `ultimo_desenho` and the `create_view` description names it. On an older server the field does not come: your AI asks you what the card shows, as before.
 
 ## 0.12.1 — 2026-11-11
 
