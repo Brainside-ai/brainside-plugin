@@ -107,6 +107,8 @@ You cannot see the card that `show_view` draws, so you learn this from the user.
 
 Updates are manual on purpose: the plugin is text that guides the AI, so the user reads `CHANGELOG.md` in `brainside-ai/brainside-plugin` first.
 
+When a result brings a newer `plugin.versao_atual` than this skill's version, tell the user once per conversation, in one line, and name the way below for their app (SKILL.md, "A new version of this plugin").
+
 - Claude Code: `claude plugin update brainside@brainside-ai`, then a new session. If the plugin shows as `brainside@synced`, it follows the user's claude.ai account and updates there.
 - claude.ai: Customize › Plugins › the `brainside-ai` marketplace › Check for updates.
 - Codex: `codex plugin marketplace upgrade brainside-ai`.
