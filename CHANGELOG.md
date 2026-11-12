@@ -6,6 +6,7 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.12.0** | The release where `show_view`'s description says to always give the link, or later | As in 0.11.0, plus: every time it shows a view, in any app, it gives you the link in one line; for your day, week, tasks, agenda, bills or goals it checks your views and Apps first, without you asking; with no view that fits, it answers from your Apps and offers to create one |
 | **0.11.0** | The release with the view's page (`show_view` returns `link`; `list_spaces` lists `visoes`), or later | As in 0.10.0, plus: every view has a page in Brainside; in Claude Code, Codex and the terminal your AI gives you that link in one line, and in claude.ai only when you say you do not see the card; on the page you change the period and refresh by yourself; for "how is my day?" it finds the view that fits on its own |
 | **0.10.0** | The release with views in the chat (the server lists `show_view`), or later | As in 0.9.0, plus: to show your App data (your day, your week), it shows a saved view drawn in the chat, voice mode included, instead of making an artifact, and shows it again after a change; it creates or changes a view only when you ask; in Claude Code, the same data comes as text |
 | **0.9.0** | The release where the permissions decide what applies at once, with quarantine and who did it (the server's `update_app_manual` answers with `written_by_your_ai`), or later | As in 0.8.1, plus: what you ask for applies at once when the permissions allow, rules, agents and manuals included, and it is in force for every AI in that space; it reads who wrote each rule, manual and agent, and the space owner's come first; a write held for review (`em_quarentena`) is not saved, and it tells you instead of retrying |
@@ -22,7 +23,22 @@ All changes to this plugin. Each release bumps `version` in `plugins/brainside/.
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`, for 0.8.1 when its tools also take `espaco`, for 0.9.0 when the `update_app_manual` tool's description says a manual is in force at once, for 0.10.0 when it also lists `show_view`, and for 0.11.0 when `show_view` returns `link`. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+Your server is ready for 0.2.0 when your AI's Brainside connector, on a connection that can save, lists the tool `answer_node_questions`, for 0.3.0 when it also lists `create_upload`, for 0.3.1 when its `backlinks` tool also takes `offset`, for 0.4.0 when its `upsert_node` tool also takes `apps`, for 0.5.0 when it also lists `open_upload_form`, for 0.6.0 when its `upsert_node` tool also takes `aplica_se_a`, for 0.7.0 when it also lists `update_app_manual`, for 0.8.0 when a search that lists `memorias_compartilhadas` also gives their `permissoes`, for 0.8.1 when its tools also take `espaco`, for 0.9.0 when the `update_app_manual` tool's description says a manual is in force at once, for 0.10.0 when it also lists `show_view`, for 0.11.0 when `show_view` returns `link`, and for 0.12.0 when `show_view`'s description says to always give the link. Brainside is hosted, so the server updates for every account at once. The connector address stays `https://api.brainside.ai/mcp` in every version.
+
+## 0.12.0 — 2026-11-11
+
+### What changes for you
+
+- **The link always comes with the view.** Every time your AI shows a view, in any app, it gives you the view's link in one line ("Abrir no Brainside: <link>"). Claude Code, also in the mobile app, says it draws cards and does not draw them; with the link you always reach the view. In claude.ai and the Claude apps, the card stays in the chat and the link comes below it.
+- **Your day and your Apps first.** When you ask about your day, week, tasks, agenda, appointments, bills or goals, or how something one of your Apps covers is going, your AI checks your views and shows the one that fits, without you asking for a view. If none fits, it answers from your Apps' records and offers, in one line, to create a view. Questions about your life and work go first through your Apps and views in Brainside.
+- **What a view is**, now at the top of the skill: a saved board over your App data (the day, the week, the month, a priority matrix, the bills), shown with the data as of now.
+- **Creating or changing a view in Claude Code.** Only `show_view` is always loaded there. When you ask for a new view or a change, your AI looks for `create_view` or `update_view` by name before saying it cannot.
+- **Better-looking views.** When it writes a view, your AI follows the views guide's good practices: room inside and between cards, one column on a phone, a sentence when a block is empty. The guide comes from the Brainside server, with ready-made card and grid styles.
+- **The skill now loads for these questions.** Its description names your day, week, tasks, agenda, bills and other App data, so in Claude Code it loads for "how is my day?" too.
+
+### What the skill expects from the server
+
+The release where `show_view`'s description says to always give the link and to check views and Apps first (the views guide with good practices and ready-made styles comes in the same release). On an older server the skill works as in 0.11.0, and still gives the link every time.
 
 ## 0.11.0 — 2026-11-11
 

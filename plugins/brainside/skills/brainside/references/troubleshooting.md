@@ -95,11 +95,13 @@ Some clients ask the user to confirm each write (ChatGPT does this for tools tha
 
 You cannot see the card that `show_view` draws, so you learn this from the user.
 
-- Claude Code, and any client that does not show cards, never draws one: present the summary in the result in markdown.
-- Elsewhere, if the user says no card appeared, give the `link` from the result in one line and present the same summary in markdown. Reloading the app or reconnecting the Brainside connector may bring the cards back; do not call `show_view` in a loop.
+- Every time you show a view, the `link` from the result already went in one line, in any client: that is how the user reaches the view even where no card is drawn.
+- Claude Code, and any client that does not show cards, never draws one, even when it announces that it does (Claude Code on the phone included): present the summary in the result in markdown.
+- Elsewhere, if the user says no card appeared, point to the `link` again and present the same summary in markdown. Reloading the app or reconnecting the Brainside connector may bring the cards back; do not call `show_view` in a loop.
 - The `link` opens the view's page in Brainside: it asks for login and shows only what the user can see. If the page says the view does not exist, the user is logged in to another account, or lost access to that space. On the page, the agenda (`entradas`) does not appear: it comes only when you show the view in the chat.
 - If the result says the time zone was not given and Brasilia time was used, the day may be off for the user: pass `fuso` (and `hoje` when you know it) in the next `show_view`.
 - A source or block shown as without access, outdated or failed is not an error of yours to retry: say what is missing. If the user wants it fixed and the view is theirs, change it with `update_view`.
+- `create_view` or `update_view` not in your tools, while `show_view` is: in Claude Code only `show_view` is always loaded. Search for the tool by name before telling the user it is missing.
 
 ## Updates
 
