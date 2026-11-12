@@ -558,6 +558,26 @@ def check_readme_version(version: str | None, texts: dict[str, str]) -> None:
                 f"plugin.json has {version}")
 
 
+SKILL_VERSION_RE = re.compile(r"This is version (\S+?) of the Brainside skill\.")
+
+
+def check_skill_version(version: str | None, texts: dict[str, str]) -> None:
+    """SKILL.md states its own version once, equal to plugin.json: the AI compares it with the newest
+    version Brainside reports (plugin.versao_atual) to tell the user an update exists."""
+    where = SKILL_DIR + "SKILL.md"
+    if version is None or where not in texts:
+        return
+    text = texts[where]
+    found = list(SKILL_VERSION_RE.finditer(text))
+    if len(found) != 1:
+        err(f"{where}: must say 'This is version {version} of the Brainside skill.' exactly once "
+            f"(found {len(found)})")
+        return
+    if found[0].group(1) != version:
+        err(f"{where}:{line_of(text, found[0].start())}: says version {found[0].group(1)}, "
+            f"plugin.json has {version}")
+
+
 def check_chatgpt(texts: dict[str, str]) -> None:
     """The block under '## Instructions' must fit ChatGPT's custom instructions field."""
     if CHATGPT not in texts:
@@ -722,6 +742,7 @@ def main(argv: list[str]) -> int:
     check_mcp_json(texts)
     check_changelog(version, texts)
     check_readme_version(version, texts)
+    check_skill_version(version, texts)
     check_chatgpt(texts)
     check_skill(texts)
 

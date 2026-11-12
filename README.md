@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="CHANGELOG.md"><img alt="Version 0.12.0" src="https://img.shields.io/badge/version-0.12.0-52514e"></a>
+  <a href="CHANGELOG.md"><img alt="Version 0.12.1" src="https://img.shields.io/badge/version-0.12.1-52514e"></a>
   <a href="#before-you-start"><img alt="Status: closed beta" src="https://img.shields.io/badge/status-closed_beta-52514e"></a>
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-52514e"></a>
 </p>
@@ -178,6 +178,7 @@ If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. 
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.12.1** | The release where `list_spaces`, `search_nodes` and `list_nodes` bring `plugin.versao_atual`, or later | As in 0.12.0. When there is a newer version of the plugin, your AI tells you once per conversation, in one line, and goes on with what you asked |
 | **0.12.0** | The release where `show_view`'s description says to always give the link, or later | As in 0.11.0. Every time it shows a view, in any app, it gives you the link in one line. For your day, week, tasks, agenda, bills or goals it checks your views and Apps first, without you asking; with no view that fits, it answers from your Apps and offers to create one |
 | **0.11.0** | The release with the view's page (`show_view` returns `link`), or later | As in 0.10.0. Every view has a page in Brainside: in Claude Code, Codex and the terminal your AI gives you the link in one line; on the page you change the period and refresh by yourself. For "how is my day?" it finds the view that fits on its own |
 | **0.10.0** | The release with views in the chat (the server lists `show_view`), or later | As in 0.9.0. To show your App data (your day, your week), it shows a saved view drawn in the chat, voice mode included, instead of an artifact, and shows it again after a change; it creates or changes a view only when you ask. In Claude Code, the same data comes as text |
@@ -195,7 +196,7 @@ If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. 
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-How to tell your server is ready: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` for 0.2.0, and also `create_upload` for 0.3.0 (in Claude Code, `/mcp`); for 0.3.1, its `backlinks` tool also takes `offset`; for 0.4.0, its `upsert_node` tool also takes `apps`; for 0.5.0, it also lists `open_upload_form`; for 0.7.0, it also lists `update_app_manual`; for 0.8.0, a search that lists `memorias_compartilhadas` also gives their `permissoes`; for 0.8.1, its tools also take `espaco`; for 0.9.0, the `update_app_manual` tool says a manual is in force at once; for 0.10.0, it also lists `show_view`; for 0.11.0, `show_view` returns `link`; for 0.12.0, `show_view`'s description says to always give the link. With 0.3.0 on a server without `create_upload`, your AI sends only small files and tells you larger ones must wait. With 0.3.1 on a server whose `backlinks` takes no `offset`, your AI still opens the day you ask about and tells you the list may be incomplete. Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
+How to tell your server is ready: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` for 0.2.0, and also `create_upload` for 0.3.0 (in Claude Code, `/mcp`); for 0.3.1, its `backlinks` tool also takes `offset`; for 0.4.0, its `upsert_node` tool also takes `apps`; for 0.5.0, it also lists `open_upload_form`; for 0.7.0, it also lists `update_app_manual`; for 0.8.0, a search that lists `memorias_compartilhadas` also gives their `permissoes`; for 0.8.1, its tools also take `espaco`; for 0.9.0, the `update_app_manual` tool says a manual is in force at once; for 0.10.0, it also lists `show_view`; for 0.11.0, `show_view` returns `link`; for 0.12.0, `show_view`'s description says to always give the link; for 0.12.1, the `search_nodes` tool's description names `plugin.versao_atual`. With 0.3.0 on a server without `create_upload`, your AI sends only small files and tells you larger ones must wait. With 0.3.1 on a server whose `backlinks` takes no `offset`, your AI still opens the day you ask about and tells you the list may be incomplete. Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
 
 Why 0.2.0 needs that release: on it, saving only creates or adds, and never overwrites. Changing an item takes a separate step that checks your AI read the latest version. On older servers, saving an item that already exists replaced its whole note, which is why 0.1.1 asks before every save.
 
@@ -222,6 +223,8 @@ Updates are manual on purpose. The plugin is text that guides your AI, so read t
 - **claude.ai:** Customize › Plugins › the `brainside-ai` marketplace › **Check for updates**.
 - **Codex:** `codex plugin marketplace upgrade brainside-ai`.
 - **ChatGPT:** when the CHANGELOG says the ChatGPT custom instructions changed, paste the new block from [`chatgpt/custom-instructions.md`](chatgpt/custom-instructions.md).
+
+From 0.12.1, your AI tells you, once per conversation and in one line, when a newer version of the plugin is out. It never updates anything by itself.
 
 ## FAQ
 
