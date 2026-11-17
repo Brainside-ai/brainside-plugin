@@ -76,7 +76,7 @@ Requirements, to tell the user before starting:
 - On Team and Enterprise, an Owner adds the Brainside connector for the organization, turns on code execution, and decides whether members may add marketplaces.
 - On the Free plan, only the connector can be added by hand (see "Connector only" below); the skill is not available.
 - Set it up on the web or in the desktop app. On mobile it works once set up.
-- To send files by command, the code execution sandbox must reach `api.brainside.ai`; until then the upload fails with `403` and `host_not_allowed`, and the AI offers the upload box instead. The user turns on network egress in Settings › Capabilities and adds `api.brainside.ai` to the allowed domains (Brainside's test on 2026-11-17, in Cowork, worked). On Team and Enterprise, an Owner adds it in Organization settings › Capabilities; a user report says the organization's list was ignored in chat. If it still fails right after the change, start a new conversation.
+- To send files by command, the code execution sandbox must reach `api.brainside.ai`; until then the upload fails with `403` and `host_not_allowed`, and the AI offers the upload box instead. The user turns on network egress in Settings › Capabilities and adds `api.brainside.ai` to the allowed domains (Brainside's test on 2026-11-17, in Cowork, worked; claude.ai web is not tested yet). On Team and Enterprise, an Owner adds it in Organization settings › Capabilities; a user report says the organization's list was ignored in chat. If it still fails right after the change, start a new conversation.
 
 You cannot click for the user. `[ask the user]` to follow these steps:
 

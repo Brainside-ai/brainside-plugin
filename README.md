@@ -82,7 +82,7 @@ Brainside is in closed beta, so creating an account takes an invite. [Join the w
 | AI | What you need |
 |---|---|
 | Claude Code | Version 2.1.292 or later for the one-line install. Older versions have their own path below. |
-| claude.ai (web, desktop, mobile) | A paid plan (Pro, Max, Team or Enterprise) with Settings › Capabilities › Code execution and file creation turned on. On Team and Enterprise, an Owner adds the connector. On the Free plan you can add the connector without the skill ([INSTALL.md](INSTALL.md#claudeai)). To send files from claude.ai by command, code execution has to reach `api.brainside.ai`, which we haven't confirmed works yet; the upload page works meanwhile ([Sending files](#sending-files)). |
+| claude.ai (web, desktop, mobile) | A paid plan (Pro, Max, Team or Enterprise) with Settings › Capabilities › Code execution and file creation turned on. On Team and Enterprise, an Owner adds the connector. On the Free plan you can add the connector without the skill ([INSTALL.md](INSTALL.md#claudeai)). To send files from claude.ai by command, code execution has to reach `api.brainside.ai`: allowing it worked in Cowork on 2026-11-17, and on claude.ai web it is not tested yet; until then, the upload box works ([Sending files](#sending-files)). |
 | Codex | The Codex CLI or Codex in the ChatGPT desktop app. The IDE extension supports the connector but not the skill. |
 | ChatGPT | A paid plan that allows custom MCP servers. On Business, Enterprise and Edu, an admin may have to allow them (Developer mode). |
 
@@ -153,8 +153,9 @@ Open a new conversation and don't mention Brainside:
 
 Ask your AI to keep a file (a receipt, a PDF, a photo) and it goes to Brainside as a file, not as pasted text:
 
-- **Where your AI can run commands and reach `api.brainside.ai`** (Claude Code, Codex; claude.ai with code execution once that host is allowed, which we haven't confirmed yet), Brainside gives it a one-time upload link for that one file, valid for 10 minutes, and your AI sends the file with a `curl` command. Brainside checks the size, the type and the SHA-256 before keeping anything.
-- **Everywhere else** (ChatGPT, claude.ai until it can reach that host, any app without code execution), your AI gives you a Brainside upload page: open it, log in, pick the file, then tell your AI it's done. The page works only for you, logged in to your own Brainside.
+- **Where your AI can run commands and reach `api.brainside.ai`** (Claude Code, Codex; Cowork and claude.ai with code execution once that host is allowed, which worked in Cowork on 2026-11-17 and is not tested on claude.ai web yet), Brainside gives it a one-time upload link for that one file, valid for 10 minutes, and your AI sends the file with a `curl` command. Brainside checks the size, the type and the SHA-256 before keeping anything.
+- **On claude.ai and the Claude apps, until your AI can reach that host,** it offers an upload box in the chat: pick the file and tap Save.
+- **Everywhere else** (ChatGPT, any app without the box), your AI gives you a Brainside upload page: open it, log in, pick the file, then tell your AI it's done. The page works only for you, logged in to your own Brainside.
 - A very small file can also go straight through the connector.
 
 Files go up to 15 MiB. For health, external or client files, your AI asks first, as with any other save. A file can go to your Brain Node, linked to the item it belongs to, or to a record in one of your Apps.
@@ -163,8 +164,8 @@ For the command to work, your AI's network has to let `api.brainside.ai` through
 
 | AI | What to allow | Source |
 |---|---|---|
-| claude.ai (Free, Pro, Max) | Settings › Capabilities: **Allow network egress**, and `api.brainside.ai` in the allowed domains. If it still fails right after, start a new conversation. Until then, use the upload box | Brainside's test on 2026-11-17: in Cowork, the upload worked after allowing `api.brainside.ai` there. Claude's Cowork docs (Network access for shell commands) describe the allowed domains in Settings › Capabilities. On claude.ai web it is expected to work the same (not tested yet) |
-| claude.ai Team and Enterprise | An Owner, in Organization settings › Capabilities, adds `api.brainside.ai` to the allowed domains | Claude's Cowork docs (Network access for shell commands). A user report (issue 86977, August 2026, closed as not planned) said the organization's list was ignored in chat, with `403 host_not_allowed`; not tested by Brainside |
+| claude.ai (Free, Pro, Max) | Settings › Capabilities: **Allow network egress**, and `api.brainside.ai` in the allowed domains. If it still fails right after, start a new conversation. Until then, use the upload box | Brainside's test on 2026-11-17: in Cowork, the upload worked after allowing `api.brainside.ai` there. Claude's Cowork docs (Network access for shell commands, read on 2026-11-17) describe the allowed domains in Settings › Capabilities. On claude.ai web it is expected to work the same (not tested yet) |
+| claude.ai Team and Enterprise | An Owner, in Organization settings › Capabilities, adds `api.brainside.ai` to the allowed domains | Claude's Cowork docs (Network access for shell commands, read on 2026-11-17). A user report (issue 86977, August 2026, closed as not planned) said the organization's list was ignored in chat, with `403 host_not_allowed`; not tested by Brainside |
 | Cowork | The same allowed domains in Settings › Capabilities | Brainside's test on 2026-11-17: the upload worked after allowing `api.brainside.ai`. A user report (issue 38984, March 2026) had said the list was ignored |
 | Claude Code | Approve the command. With `/sandbox` on, approve the host once, or list it in the sandbox's allowed domains (`"sandbox": {"network": {"allowedDomains": ["api.brainside.ai"]}}` in your settings) | Claude Code docs, Sandboxing page |
 | Claude Code on the web | An environment with **Custom** network access that lists `api.brainside.ai` | Claude Code docs, Cloud environments page |
