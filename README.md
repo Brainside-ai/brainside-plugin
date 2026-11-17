@@ -14,7 +14,7 @@
 
 <p align="center">
   <a href="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/brainside-ai/brainside-plugin/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="CHANGELOG.md"><img alt="Version 0.12.2" src="https://img.shields.io/badge/version-0.12.2-52514e"></a>
+  <a href="CHANGELOG.md"><img alt="Version 0.12.3" src="https://img.shields.io/badge/version-0.12.3-52514e"></a>
   <a href="#before-you-start"><img alt="Status: closed beta" src="https://img.shields.io/badge/status-closed_beta-52514e"></a>
   <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-52514e"></a>
 </p>
@@ -159,25 +159,26 @@ Ask your AI to keep a file (a receipt, a PDF, a photo) and it goes to Brainside 
 
 Files go up to 15 MiB. For health, external or client files, your AI asks first, as with any other save. A file can go to your Brain Node, linked to the item it belongs to, or to a record in one of your Apps.
 
-For the command to work, your AI's network has to let `api.brainside.ai` through. What each maker's documentation said when we checked, on 2026-10-22:
+For the command to work, your AI's network has to let `api.brainside.ai` through. What each maker's documentation said when we checked, on 2026-10-22, updated with Brainside's test on 2026-11-17:
 
 | AI | What to allow | Source |
 |---|---|---|
-| claude.ai (Free, Pro, Max) | Not confirmed to work yet. Settings › Capabilities › Code execution and file creation › **Allow network egress**, and `api.brainside.ai` in the additional allowed domains if your settings show that field. Then a new conversation. Until it works, use the upload page | Claude Help Center article on code execution and file creation (updated 2026-08-06): for these plans it describes only the switch, with no field for domains. A user report (anthropics/claude-code issue 19087, January 2026) shows that field but says the domains in it weren't applied; it was closed as a duplicate of issue 11897, which is still open |
-| claude.ai Team and Enterprise | Not confirmed to work yet. An Owner, in Organization settings › Capabilities, allows package managers and specific domains, and adds `api.brainside.ai` | Same article. A user report (issue 86977, August 2026, closed as not planned) says the organization's list was ignored in chat, with `403 host_not_allowed` |
-| Cowork | The same list, then a new session | A user report (issue 38984, open since March 2026) says the list is ignored |
+| claude.ai (Free, Pro, Max) | Settings › Capabilities: **Allow network egress**, and `api.brainside.ai` in the allowed domains. If it still fails right after, start a new conversation. Until then, use the upload box | Brainside's test on 2026-11-17: in Cowork, the upload worked after allowing `api.brainside.ai` there. Claude's Cowork docs (Network access for shell commands) describe the allowed domains in Settings › Capabilities. On claude.ai web it is expected to work the same (not tested yet) |
+| claude.ai Team and Enterprise | An Owner, in Organization settings › Capabilities, adds `api.brainside.ai` to the allowed domains | Claude's Cowork docs (Network access for shell commands). A user report (issue 86977, August 2026, closed as not planned) said the organization's list was ignored in chat, with `403 host_not_allowed`; not tested by Brainside |
+| Cowork | The same allowed domains in Settings › Capabilities | Brainside's test on 2026-11-17: the upload worked after allowing `api.brainside.ai`. A user report (issue 38984, March 2026) had said the list was ignored |
 | Claude Code | Approve the command. With `/sandbox` on, approve the host once, or list it in the sandbox's allowed domains (`"sandbox": {"network": {"allowedDomains": ["api.brainside.ai"]}}` in your settings) | Claude Code docs, Sandboxing page |
 | Claude Code on the web | An environment with **Custom** network access that lists `api.brainside.ai` | Claude Code docs, Cloud environments page |
 | Codex CLI, IDE extension, desktop app | Approve the command when Codex asks (default Auto preset). Setting `network_access = true` under `[sandbox_workspace_write]` also works, but it opens the network to every host for every command; prefer approving the command | OpenAI Codex docs, Agent approvals and security page |
 | Codex cloud | Turn on agent internet access for the environment, add `api.brainside.ai`, and don't limit HTTP methods to GET, HEAD and OPTIONS (the upload is a PUT) | OpenAI Codex docs, Internet access page (Codex Cloud, legacy) |
 | ChatGPT | Nothing: your AI gives you the upload page | ChatGPT's Python has no outbound network access (third-party test by Simon Willison, 2026-01-26) |
 
-If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. Your AI offers the upload page and tells you where the host can be allowed.
+If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. Your AI offers the upload box (or page) right away and tells you, once per conversation, where to allow the host so it sends files by itself next time.
 
 ## Compatibility
 
 | Plugin | Brainside server | How your AI saves |
 |---|---|---|
+| **0.12.3** | The release where the `create_upload` description says how to allow `api.brainside.ai`, or later | As in 0.12.2. When its upload command is blocked by your app's network, it offers the upload box and tells you once how to allow `api.brainside.ai`; it never sends a file reference in place of the file |
 | **0.12.2** | The release where the view's `get_node` brings `ultimo_desenho`, or later | As in 0.12.1. After it creates or changes a view, where the app draws it, it checks that the view drew and fixes the block that failed; fragments (`<>…</>`) work |
 | **0.12.1** | The release where `list_spaces`, `search_nodes` and `list_nodes` bring `plugin.versao_atual`, or later | As in 0.12.0. When there is a newer version of the plugin, your AI tells you once per conversation, in one line, and goes on with what you asked |
 | **0.12.0** | The release where `show_view`'s description says to always give the link, or later | As in 0.11.0. Every time it shows a view, in any app, it gives you the link in one line. For your day, week, tasks, agenda, bills or goals it checks your views and Apps first, without you asking; with no view that fits, it answers from your Apps and offers to create one |
@@ -197,7 +198,7 @@ If your AI's command fails with `host_not_allowed`, the host isn't allowed yet. 
 | **0.2.0** | The release of 2026-10-21 (the second that day) or later | Proactive saving: saves new items on its own and tells you in one line. Asks before changing or deleting anything, and before saving setup, sensitive, external or client data |
 | **0.1.1** | Servers before and after that release | Asks before every save |
 
-How to tell your server is ready: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` for 0.2.0, and also `create_upload` for 0.3.0 (in Claude Code, `/mcp`); for 0.3.1, its `backlinks` tool also takes `offset`; for 0.4.0, its `upsert_node` tool also takes `apps`; for 0.5.0, it also lists `open_upload_form`; for 0.7.0, it also lists `update_app_manual`; for 0.8.0, a search that lists `memorias_compartilhadas` also gives their `permissoes`; for 0.8.1, its tools also take `espaco`; for 0.9.0, the `update_app_manual` tool says a manual is in force at once; for 0.10.0, it also lists `show_view`; for 0.11.0, `show_view` returns `link`; for 0.12.0, `show_view`'s description says to always give the link; for 0.12.1, the `search_nodes` tool's description names `plugin.versao_atual`; for 0.12.2, the `create_view` tool's description names `ultimo_desenho`. With 0.3.0 on a server without `create_upload`, your AI sends only small files and tells you larger ones must wait. With 0.3.1 on a server whose `backlinks` takes no `offset`, your AI still opens the day you ask about and tells you the list may be incomplete. Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
+How to tell your server is ready: on a connection that can save, your AI's Brainside connector lists the tool `answer_node_questions` for 0.2.0, and also `create_upload` for 0.3.0 (in Claude Code, `/mcp`); for 0.3.1, its `backlinks` tool also takes `offset`; for 0.4.0, its `upsert_node` tool also takes `apps`; for 0.5.0, it also lists `open_upload_form`; for 0.7.0, it also lists `update_app_manual`; for 0.8.0, a search that lists `memorias_compartilhadas` also gives their `permissoes`; for 0.8.1, its tools also take `espaco`; for 0.9.0, the `update_app_manual` tool says a manual is in force at once; for 0.10.0, it also lists `show_view`; for 0.11.0, `show_view` returns `link`; for 0.12.0, `show_view`'s description says to always give the link; for 0.12.1, the `search_nodes` tool's description names `plugin.versao_atual`; for 0.12.2, the `create_view` tool's description names `ultimo_desenho`; for 0.12.3, the `create_upload` tool's description names Settings › Capabilities. With 0.3.0 on a server without `create_upload`, your AI sends only small files and tells you larger ones must wait. With 0.3.1 on a server whose `backlinks` takes no `offset`, your AI still opens the day you ask about and tells you the list may be incomplete. Brainside is hosted, so you never update the server yourself: once a release is live, every account has it.
 
 Why 0.2.0 needs that release: on it, saving only creates or adds, and never overwrites. Changing an item takes a separate step that checks your AI read the latest version. On older servers, saving an item that already exists replaced its whole note, which is why 0.1.1 asks before every save.
 
